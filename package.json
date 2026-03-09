@@ -1,0 +1,27 @@
+{
+  "name": "marketpro",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "dev:admin": "turbo dev --filter=@marketpro/admin",
+    "dev:client": "turbo dev --filter=@marketpro/client",
+    "build:admin": "turbo build --filter=@marketpro/admin",
+    "build:client": "turbo build --filter=@marketpro/client"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "latest"
+  },
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

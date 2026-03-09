@@ -1,0 +1,39 @@
+{
+  "name": "@marketpro/client",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "dev": "expo start",
+    "build:android": "eas build --platform android",
+    "build:ios": "eas build --platform ios",
+    "submit:android": "eas submit --platform android",
+    "submit:ios": "eas submit --platform ios"
+  },
+  "dependencies": {
+    "expo": "latest",
+    "expo-router": "latest",
+    "expo-status-bar": "latest",
+    "expo-font": "latest",
+    "expo-notifications": "latest",
+    "expo-secure-store": "latest",
+    "expo-linking": "latest",
+    "expo-constants": "latest",
+    "react": "latest",
+    "react-native": "latest",
+    "react-native-safe-area-context": "latest",
+    "react-native-screens": "latest",
+    "react-native-reanimated": "latest",
+    "react-native-gesture-handler": "latest",
+    "@react-navigation/bottom-tabs": "latest",
+    "@supabase/supabase-js": "latest",
+    "@expo/vector-icons": "latest",
+    "nativewind": "latest",
+    "react-native-svg": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "@types/react": "latest",
+    "tailwindcss": "latest"
+  }
+}
