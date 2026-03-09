@@ -16,6 +16,11 @@
     "build:admin": "turbo build --filter=@marketpro/admin",
     "build:client": "turbo build --filter=@marketpro/client"
   },
+  "dependencies": {
+    "tailwindcss": "4.2.1",
+    "@tailwindcss/postcss": "4.2.1",
+    "postcss": "8.5.3"
+  },
   "devDependencies": {
     "turbo": "latest",
     "typescript": "latest"
