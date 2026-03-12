@@ -18,7 +18,13 @@
   --color-accent-500: #22c55e;
   --color-accent-600: #16a34a;
 
+  --color-destructive: #ef4444;
+
   --font-sans: "Cairo", "Segoe UI", system-ui, sans-serif;
+
+  --radius-lg: 0.75rem;
+  --radius-md: calc(var(--radius-lg) - 2px);
+  --radius-sm: calc(var(--radius-lg) - 4px);
 }
 
 @layer base {

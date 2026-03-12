@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { requireAuth } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
 
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("api_keys")
       .select("id, service, key_name, key_value, is_active, created_at, updated_at")
       .order("service")
@@ -36,11 +33,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
 
     const body = await req.json();
     const { service, key_name, key_value } = body;
@@ -49,10 +43,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "جميع الحقول مطلوبة" }, { status: 400 });
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("api_keys")
       .upsert(
-        { service, key_name, key_value, is_active: true, created_by: user.id },
+        { service, key_name, key_value, is_active: true, created_by: auth.user.id, organization_id: auth.orgId },
         { onConflict: "service,key_name" }
       )
       .select()
@@ -78,17 +72,14 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "المعرّف مطلوب" }, { status: 400 });
 
-    const { error } = await supabase.from("api_keys").delete().eq("id", id);
+    const { error } = await auth.supabase.from("api_keys").delete().eq("id", id);
     if (error) {
       console.error("API key delete error:", error);
       return NextResponse.json({ error: "لا تملك صلاحية للحذف" }, { status: 403 });

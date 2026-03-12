@@ -83,8 +83,8 @@ export default function LoginPage() {
               <Sparkles className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">MarketPro</h1>
-              <p className="text-sm text-slate-400">إدارة التسويق الذكي</p>
+              <h1 className="text-2xl font-bold text-slate-900">سطوة</h1>
+              <p className="text-sm text-slate-400">ذكاء اصطناعي يدير تسويقك</p>
             </div>
           </div>
 
@@ -154,6 +154,7 @@ export default function LoginPage() {
                   className="input-field ps-12"
                   required
                   dir="ltr"
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"

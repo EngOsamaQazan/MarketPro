@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Sparkles, Key, Eye, EyeOff, Save, Loader2, CheckCircle, AlertTriangle,
   Shield, X, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Copy,
-  Check, Plug, Info, BookOpen, Zap, Globe, Hash, Lock, User, Link2,
+  Check, Plug, Info, BookOpen, Zap, Globe, Hash, Lock, User, Users, Link2,
   RefreshCw, Settings, Cpu
 } from "lucide-react";
 
@@ -65,11 +65,11 @@ const SERVICES: ServiceConfig[] = [
       },
       {
         title: "إنشاء مفتاح API",
-        description: "أنشئ مفتاح API جديد للاستخدام مع نظام MarketPro",
+        description: "أنشئ مفتاح API جديد للاستخدام مع نظام سطوة",
         instructions: [
           "اذهب إلى Settings → API Keys",
           "اضغط Create Key",
-          "أدخل اسم المفتاح (مثلاً: MarketPro)",
+          "أدخل اسم المفتاح (مثلاً: سطوة)",
           "انسخ المفتاح فوراً — لن يظهر مرة أخرى!",
         ],
         warnings: ["احفظ المفتاح في مكان آمن فوراً — لا يمكن استعراضه بعد إغلاق النافذة"],
@@ -98,7 +98,7 @@ const SERVICES: ServiceConfig[] = [
     keys: [
       { name: "app_id", label: "App ID (معرّف التطبيق)", placeholder: "123456789012345", hint: "رقم التطبيق — يظهر في أعلى لوحة التحكم أو من App Settings → Basic" },
       { name: "app_secret", label: "App Secret (سر التطبيق)", placeholder: "abc123def456...", hint: "من App Settings → Basic → اضغط Show بجانب App Secret", secret: true },
-      { name: "access_token", label: "Access Token (رمز الوصول)", placeholder: "EAAxxxxxxx...", hint: "رمز System User الدائم — من Business Settings → System Users → Generate Token", secret: true },
+      { name: "access_token", label: "Access Token (رمز الوصول)", placeholder: "EAAxxxxxxx...", hint: "يتم تعبئته تلقائياً عند الربط عبر OAuth — أو أدخل رمز System User يدوياً", secret: true },
     ],
     guide: [
       {
@@ -115,12 +115,12 @@ const SERVICES: ServiceConfig[] = [
       },
       {
         title: "إنشاء تطبيق في Meta for Developers",
-        description: "هذا التطبيق هو البوابة التي يستخدمها MarketPro للتواصل مع فيسبوك وإنستغرام",
+        description: "هذا التطبيق هو البوابة التي يستخدمها سطوة للتواصل مع فيسبوك وإنستغرام",
         instructions: [
           "اذهب إلى developers.facebook.com وسجّل دخولك",
           "اضغط «تطبيقاتي» (My Apps) في أعلى الصفحة",
           "اضغط «إنشاء تطبيق» (Create App)",
-          "في صفحة «تفاصيل التطبيق»: أدخل اسم التطبيق (مثلاً: MarketPro) واختر حساب الأعمال الخاص بك",
+          "في صفحة «تفاصيل التطبيق»: أدخل اسم التطبيق (مثلاً: سطوة) واختر حساب الأعمال الخاص بك",
           "اضغط «التالي» للانتقال لخطوة حالات الاستخدام",
         ],
         link: { url: "https://developers.facebook.com/apps/create/", label: "إنشاء تطبيق جديد" },
@@ -169,10 +169,11 @@ const SERVICES: ServiceConfig[] = [
           "ابحث عن هذه الصلاحيات واطلبها واحدة واحدة:",
           "ads_management — لإدارة الحملات الإعلانية (إنشاء، تعديل، إيقاف)",
           "ads_read — لقراءة بيانات وإحصائيات الإعلانات",
-          "pages_manage_posts — لنشر المحتوى على صفحات فيسبوك",
+          "pages_show_list — لعرض قائمة الصفحات المُدارة",
           "pages_read_engagement — لقراءة التفاعلات والتعليقات",
-          "instagram_basic — لربط حساب إنستغرام وقراءة بياناته",
-          "instagram_content_publish — لنشر المحتوى على إنستغرام",
+          "pages_read_user_content — لقراءة محتوى الصفحات",
+          "pages_manage_metadata — لإدارة معلومات الصفحات",
+          "business_management — للوصول لجميع Business Portfolios",
         ],
         notes: [
           "الصلاحيات في وضع Development تعمل فوراً مع حسابك",
@@ -186,10 +187,10 @@ const SERVICES: ServiceConfig[] = [
           "اذهب إلى business.facebook.com → «إعدادات الأعمال» (Business Settings)",
           "من القائمة الجانبية اختر «المستخدمون» → «مستخدمو النظام» (System Users)",
           "اضغط «إضافة» (Add) لإنشاء System User جديد",
-          "أدخل اسم (مثلاً: MarketPro Bot) واختر الدور «مسؤول» (Admin)",
+          "أدخل اسم (مثلاً: سطوة Bot) واختر الدور «مسؤول» (Admin)",
           "بعد الإنشاء، اضغط «إنشاء رمز مميز» (Generate New Token)",
           "اختر التطبيق الذي أنشأته في الخطوات السابقة",
-          "اختر الصلاحيات: ads_management, ads_read, pages_manage_posts, pages_read_engagement, instagram_basic, instagram_content_publish",
+          "اختر الصلاحيات: ads_read, pages_show_list, pages_read_engagement, pages_read_user_content, pages_manage_metadata, business_management",
           "اضغط «إنشاء رمز مميز» — انسخ الرمز فوراً! هذا هو Access Token",
         ],
         warnings: ["الرمز يظهر مرة واحدة فقط! انسخه واحفظه فوراً قبل إغلاق النافذة"],
@@ -661,6 +662,172 @@ export default function SettingsPage() {
     }
   };
 
+  const [oauthLoading, setOauthLoading] = useState(false);
+
+  /* ── Google Ads Account Management ── */
+  interface GadsAccount {
+    id: string;
+    name: string;
+    selected: boolean;
+  }
+  const [gadsAccounts, setGadsAccounts] = useState<GadsAccount[]>([]);
+  const [gadsLoading, setGadsLoading] = useState(false);
+  const [gadsSaving, setGadsSaving] = useState(false);
+  const [gadsLoaded, setGadsLoaded] = useState(false);
+
+  const fetchGadsAccounts = async () => {
+    setGadsLoading(true);
+    try {
+      const res = await fetch("/api/google-ads/managed-accounts", { credentials: "include" });
+      const data = await res.json();
+      if (data.accounts) {
+        setGadsAccounts(data.accounts);
+        setGadsLoaded(true);
+      }
+    } catch {
+      setMessage({ type: "error", text: "فشل جلب حسابات Google Ads" });
+    }
+    setGadsLoading(false);
+  };
+
+  const toggleGadsAccount = (id: string) => {
+    setGadsAccounts((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, selected: !a.selected } : a))
+    );
+  };
+
+  const updateGadsName = (id: string, name: string) => {
+    setGadsAccounts((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, name } : a))
+    );
+  };
+
+  const saveGadsAccounts = async () => {
+    const selected = gadsAccounts.filter((a) => a.selected);
+    const incomplete = selected.filter((a) => !a.name.trim());
+    if (incomplete.length > 0) {
+      setMessage({ type: "error", text: "يرجى إدخال اسم لكل حساب مُختار" });
+      return;
+    }
+    setGadsSaving(true);
+    try {
+      const res = await fetch("/api/google-ads/managed-accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accounts: selected.map((a) => ({ id: a.id, name: a.name })) }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMessage({ type: "success", text: data.message });
+      } else {
+        setMessage({ type: "error", text: data.error || "فشل الحفظ" });
+      }
+    } catch {
+      setMessage({ type: "error", text: "خطأ في حفظ الحسابات" });
+    }
+    setGadsSaving(false);
+  };
+
+  const handleGoogleAdsOAuth = async () => {
+    setOauthLoading(true);
+    try {
+      const res = await fetch("/api/google-ads/oauth");
+      const data = await res.json();
+      if (data.authUrl) {
+        window.location.href = data.authUrl;
+      } else {
+        setMessage({ type: "error", text: data.error || "فشل إنشاء رابط التفويض" });
+        setOauthLoading(false);
+      }
+    } catch {
+      setMessage({ type: "error", text: "خطأ في الاتصال بخدمة التفويض" });
+      setOauthLoading(false);
+    }
+  };
+
+  const [metaOauthLoading, setMetaOauthLoading] = useState(false);
+  const [metaConnectedInfo, setMetaConnectedInfo] = useState<{
+    name: string;
+    pages: number;
+    businesses: number;
+    ad_accounts: number;
+    connected_at: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const connectedUserKey = keys.find(
+      (k: ApiKeyEntry) => k.service === "meta" && k.key_name === "connected_user" && k.is_active
+    );
+    if (connectedUserKey) {
+      try {
+        setMetaConnectedInfo(JSON.parse(connectedUserKey.key_value));
+      } catch {}
+    }
+  }, [keys]);
+
+  const handleMetaOAuth = async () => {
+    setMetaOauthLoading(true);
+    try {
+      const res = await fetch("/api/meta/oauth");
+      const data = await res.json();
+      if (data.authUrl) {
+        window.location.href = data.authUrl;
+      } else {
+        setMessage({ type: "error", text: data.error || "فشل إنشاء رابط التفويض — تأكد من إضافة App ID أولاً" });
+        setMetaOauthLoading(false);
+      }
+    } catch {
+      setMessage({ type: "error", text: "خطأ في الاتصال بخدمة التفويض" });
+      setMetaOauthLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("success") === "google_ads_connected") {
+      setMessage({ type: "success", text: "تم ربط حساب Google Ads بنجاح! تم حفظ Refresh Token تلقائياً." });
+      setActiveService("google_ads");
+      window.history.replaceState({}, "", "/settings");
+      fetchKeys();
+    }
+
+    if (params.get("success") === "meta_connected") {
+      setMessage({ type: "success", text: "تم ربط حساب فيسبوك بنجاح! الآن يمكنك الوصول لجميع الصفحات والحسابات الإعلانية." });
+      setActiveService("meta");
+      window.history.replaceState({}, "", "/settings");
+      fetchKeys();
+    }
+
+    const error = params.get("error");
+    if (error?.startsWith("google_ads_")) {
+      const errorMessages: Record<string, string> = {
+        google_ads_oauth_denied: "تم رفض التفويض — يرجى المحاولة مرة أخرى",
+        google_ads_no_code: "لم يتم استلام رمز التفويض",
+        google_ads_missing_credentials: "بيانات OAuth غير مكتملة — أضف Client ID و Secret أولاً",
+        google_ads_no_refresh_token: "لم يتم استلام Refresh Token — يرجى إعادة الربط",
+        google_ads_callback_error: "حدث خطأ أثناء معالجة التفويض",
+      };
+      setMessage({ type: "error", text: errorMessages[error] || "خطأ في ربط Google Ads" });
+      setActiveService("google_ads");
+      window.history.replaceState({}, "", "/settings");
+    }
+
+    if (error?.startsWith("meta_")) {
+      const errorMessages: Record<string, string> = {
+        meta_oauth_denied: "تم رفض التفويض — يرجى المحاولة مرة أخرى",
+        meta_no_code: "لم يتم استلام رمز التفويض",
+        meta_missing_credentials: "بيانات التطبيق غير مكتملة — أضف App ID و App Secret أولاً",
+        meta_token_exchange_failed: "فشل تبادل رمز الوصول — تأكد من صحة App Secret",
+        meta_long_lived_failed: "فشل الحصول على رمز طويل الأمد",
+        meta_callback_error: "حدث خطأ أثناء معالجة التفويض",
+      };
+      setMessage({ type: "error", text: errorMessages[error] || "خطأ في ربط Meta" });
+      setActiveService("meta");
+      window.history.replaceState({}, "", "/settings");
+    }
+  }, []);
+
   const activeConfig = SERVICES.find((s) => s.id === activeService)!;
 
   return (
@@ -870,6 +1037,208 @@ export default function SettingsPage() {
                 </div>
               </div>
 
+              {/* OAuth Connect Button for Meta */}
+              {activeConfig.id === "meta" && (
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Link2 className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-slate-900">ربط حسابك على فيسبوك عبر OAuth</p>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        سجّل دخول بحسابك الشخصي لجلب جميع الصفحات والحسابات الإعلانية عبر كل Business Portfolios
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleMetaOAuth}
+                      disabled={metaOauthLoading || !getKeyForService("meta", "app_id") || !getKeyForService("meta", "app_secret")}
+                      className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {metaOauthLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <ExternalLink className="h-4 w-4" />
+                      )}
+                      {getKeyForService("meta", "access_token") ? "إعادة الربط" : "ربط الحساب"}
+                    </button>
+                  </div>
+
+                  {(!getKeyForService("meta", "app_id") || !getKeyForService("meta", "app_secret")) && (
+                    <p className="text-xs text-amber-600 mt-3 flex items-center gap-1.5">
+                      <AlertTriangle className="h-3.5 w-3.5" />
+                      أضف App ID و App Secret أولاً لتفعيل زر الربط
+                    </p>
+                  )}
+
+                  {metaConnectedInfo && (
+                    <div className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-600" />
+                        <p className="text-sm font-bold text-emerald-800">متصل بحساب: {metaConnectedInfo.name}</p>
+                      </div>
+                      <div className="grid grid-cols-3 gap-3 mt-3">
+                        <div className="rounded-lg bg-white p-2.5 text-center">
+                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.pages}</p>
+                          <p className="text-[10px] text-slate-500">صفحة</p>
+                        </div>
+                        <div className="rounded-lg bg-white p-2.5 text-center">
+                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.businesses}</p>
+                          <p className="text-[10px] text-slate-500">Portfolio</p>
+                        </div>
+                        <div className="rounded-lg bg-white p-2.5 text-center">
+                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.ad_accounts}</p>
+                          <p className="text-[10px] text-slate-500">حساب إعلاني</p>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-emerald-600 mt-2">
+                        آخر ربط: {new Date(metaConnectedInfo.connected_at).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* OAuth Connect Button for Google Ads */}
+              {activeConfig.id === "google_ads" && (
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Link2 className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-slate-900">ربط حساب Google Ads عبر OAuth</p>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        بعد إضافة Client ID و Client Secret، اضغط الزر للربط والحصول على Refresh Token تلقائياً
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleGoogleAdsOAuth}
+                      disabled={oauthLoading || !getKeyForService("google_ads", "client_id") || !getKeyForService("google_ads", "client_secret")}
+                      className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {oauthLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <ExternalLink className="h-4 w-4" />
+                      )}
+                      {getKeyForService("google_ads", "refresh_token") ? "إعادة الربط" : "ربط الحساب"}
+                    </button>
+                  </div>
+                  {(!getKeyForService("google_ads", "client_id") || !getKeyForService("google_ads", "client_secret")) && (
+                    <p className="text-xs text-amber-600 mt-3 flex items-center gap-1.5">
+                      <AlertTriangle className="h-3.5 w-3.5" />
+                      أضف Client ID و Client Secret أولاً لتفعيل زر الربط
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Google Ads Account Manager */}
+              {activeConfig.id === "google_ads" && (
+                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden mb-6">
+                  <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-l from-slate-50 to-white">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-primary-600" />
+                        <h3 className="text-sm font-bold text-slate-900">إدارة الحسابات الإعلانية</h3>
+                      </div>
+                      <button
+                        onClick={fetchGadsAccounts}
+                        disabled={gadsLoading}
+                        className="flex items-center gap-1.5 rounded-lg bg-primary-50 px-3 py-2 text-xs font-semibold text-primary-600 hover:bg-primary-100 disabled:opacity-50 transition-colors"
+                      >
+                        {gadsLoading ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <RefreshCw className="h-3.5 w-3.5" />
+                        )}
+                        {gadsLoaded ? "تحديث" : "جلب الحسابات"}
+                      </button>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">
+                      اختر الحسابات الإعلانية التي تريد إدارتها من النظام وسمّ كل حساب باسم النشاط التجاري
+                    </p>
+                  </div>
+
+                  <div className="p-6">
+                    {!gadsLoaded ? (
+                      <div className="text-center py-8">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mx-auto mb-3">
+                          <Users className="h-6 w-6" />
+                        </div>
+                        <p className="text-sm text-slate-500 mb-1">لم يتم جلب الحسابات بعد</p>
+                        <p className="text-xs text-slate-400">اضغط &quot;جلب الحسابات&quot; لعرض جميع الحسابات المتاحة في Google Ads</p>
+                      </div>
+                    ) : gadsAccounts.length === 0 ? (
+                      <div className="text-center py-8">
+                        <p className="text-sm text-slate-500">لا توجد حسابات متاحة</p>
+                        <p className="text-xs text-slate-400 mt-1">تأكد من ربط حساب Google Ads أولاً</p>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-3">
+                          {gadsAccounts.map((account) => (
+                            <div
+                              key={account.id}
+                              className={`flex items-center gap-4 rounded-xl border p-4 transition-all ${
+                                account.selected
+                                  ? "border-primary-200 bg-primary-50/50"
+                                  : "border-slate-100 bg-slate-50/50 hover:border-slate-200"
+                              }`}
+                            >
+                              <label className="relative flex cursor-pointer items-center">
+                                <input
+                                  type="checkbox"
+                                  className="peer sr-only"
+                                  checked={account.selected}
+                                  onChange={() => toggleGadsAccount(account.id)}
+                                />
+                                <div className="flex h-6 w-6 items-center justify-center rounded-lg border-2 transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600 border-slate-300">
+                                  {account.selected && <Check className="h-3.5 w-3.5 text-white" />}
+                                </div>
+                              </label>
+
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1.5">
+                                  <span className="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded" dir="ltr">
+                                    {account.id.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}
+                                  </span>
+                                </div>
+                                {account.selected && (
+                                  <input
+                                    type="text"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                                    placeholder="اسم النشاط التجاري (مثال: الفاخر للشقق الفندقيه)"
+                                    value={account.name}
+                                    onChange={(e) => updateGadsName(account.id, e.target.value)}
+                                    autoComplete="off"
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100">
+                          <p className="text-xs text-slate-500">
+                            {gadsAccounts.filter((a) => a.selected).length} من {gadsAccounts.length} حساب مُختار
+                          </p>
+                          <button
+                            onClick={saveGadsAccounts}
+                            disabled={gadsSaving || gadsAccounts.filter((a) => a.selected).length === 0}
+                            className="flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          >
+                            {gadsSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                            حفظ الحسابات المُختارة
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Setup Guide */}
               <SetupGuide guide={activeConfig.guide} serviceId={activeConfig.id} />
 
@@ -895,6 +1264,9 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="p-6 space-y-5">
+                  {/* Hidden fields to prevent Chrome from autofilling API key inputs with saved credentials */}
+                  <input type="text" name="prevent_autofill_username" autoComplete="username" className="hidden" tabIndex={-1} aria-hidden="true" />
+                  <input type="password" name="prevent_autofill_password" autoComplete="new-password" className="hidden" tabIndex={-1} aria-hidden="true" />
                   {activeConfig.keys.map((keyConfig) => {
                     const existing = getKeyForService(activeConfig.id, keyConfig.name);
                     const editKey = `${activeConfig.id}:${keyConfig.name}`;
@@ -929,6 +1301,10 @@ export default function SettingsPage() {
                               value={editValues[editKey] || ""}
                               onChange={(e) => setEditValues((prev) => ({ ...prev, [editKey]: e.target.value }))}
                               dir="ltr"
+                              autoComplete="off"
+                              data-1p-ignore
+                              data-lpignore="true"
+                              data-form-type="other"
                             />
                             <button
                               type="button"

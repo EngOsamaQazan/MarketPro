@@ -5,35 +5,32 @@ import {
   TrendingUp,
   Globe,
   BarChart3,
-  Sparkles,
   RefreshCw,
   Users,
   DollarSign,
   Eye,
   MousePointerClick,
   Megaphone,
-  Loader2,
   WifiOff,
 } from "lucide-react";
 import { cn, formatNumber, formatCurrency } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useClient } from "@/components/providers/client-context";
 
-interface OverviewStats {
-  totalPages: number;
-  totalFollowers: number;
-  totalIgFollowers: number;
-  totalAdAccounts: number;
-  totalCampaigns: number;
-  activeCampaigns: number;
-  totalReach: number;
-  totalImpressions: number;
-  totalClicks: number;
-  totalSpend: number;
-  avgCtr: number;
+interface PlatformData {
+  source: string;
+  connected: boolean;
+  stats: Record<string, any> | null;
 }
 
 interface TopCampaign {
   id: string;
   name: string;
+  source: string;
   status: string;
   objective: string;
   metrics: {
@@ -57,42 +54,77 @@ interface PageInfo {
 }
 
 export default function AnalyticsPage() {
-  const [stats, setStats] = useState<OverviewStats | null>(null);
-  const [topCampaigns, setTopCampaigns] = useState<TopCampaign[]>([]);
-  const [pages, setPages] = useState<PageInfo[]>([]);
+  const [metaData, setMetaData] = useState<any>(null);
+  const [googleData, setGoogleData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [connected, setConnected] = useState(false);
+  const [tab, setTab] = useState<"all" | "meta" | "google">("all");
+  const { selectedClientId, selectedClient } = useClient();
 
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/meta/overview");
-      const data = await res.json();
-      setConnected(data.connected || false);
-      setStats(data.stats || null);
-      setTopCampaigns(data.topCampaigns || []);
-      setPages(data.pages || []);
+      const [metaRes, googleRes] = await Promise.all([
+        fetch("/api/meta/overview").then((r) => r.json()).catch(() => ({ connected: false })),
+        fetch("/api/google-ads/overview").then((r) => r.json()).catch(() => ({ connected: false })),
+      ]);
+      setMetaData(metaRes);
+      setGoogleData(googleRes);
     } catch {
-      setConnected(false);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchAnalytics(); }, []);
+  useEffect(() => { fetchAnalytics(); }, [selectedClientId]);
 
   if (loading) {
     return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-          <p className="text-sm text-slate-500">جاري جلب التحليلات...</p>
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+          <Skeleton className="h-10 w-36" />
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="h-10 w-20 rounded-lg" />
+          <Skeleton className="h-10 w-24 rounded-lg" />
+          <Skeleton className="h-10 w-28 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="h-10 w-10 rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-7 w-16" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <Card>
+            <CardHeader><Skeleton className="h-6 w-40" /></CardHeader>
+            <CardContent><Skeleton className="h-48 w-full" /></CardContent>
+          </Card>
+          <Card>
+            <CardHeader><Skeleton className="h-6 w-40" /></CardHeader>
+            <CardContent><Skeleton className="h-48 w-full" /></CardContent>
+          </Card>
         </div>
       </div>
     );
   }
 
-  if (!connected) {
+  const metaConnected = metaData?.connected || false;
+  const googleConnected = googleData?.connected || false;
+
+  if (!metaConnected && !googleConnected) {
     return (
       <div className="flex h-96 items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center">
@@ -106,114 +138,162 @@ export default function AnalyticsPage() {
     );
   }
 
+  const mStats = metaData?.stats || {};
+  const gStats = googleData?.stats || {};
+
+  const combined = {
+    totalReach: (mStats.totalReach || 0) + (gStats.totalImpressions || 0),
+    totalClicks: (mStats.totalClicks || 0) + (gStats.totalClicks || 0),
+    totalSpend: Math.round(((mStats.totalSpend || 0) + (gStats.totalCost || 0)) * 100) / 100,
+    totalFollowers: (mStats.totalFollowers || 0) + (mStats.totalIgFollowers || 0),
+    totalCampaigns: (mStats.totalCampaigns || 0) + (gStats.totalCampaigns || 0),
+    activeCampaigns: (mStats.activeCampaigns || 0) + (gStats.activeCampaigns || 0),
+    totalImpressions: (mStats.totalImpressions || 0) + (gStats.totalImpressions || 0),
+    totalConversions: gStats.totalConversions || 0,
+  };
+  const combinedCtr = combined.totalImpressions > 0
+    ? Math.round((combined.totalClicks / combined.totalImpressions) * 10000) / 100
+    : 0;
+
+  const showStats = tab === "all" ? combined : tab === "meta"
+    ? { totalReach: mStats.totalReach || 0, totalClicks: mStats.totalClicks || 0, totalSpend: mStats.totalSpend || 0, totalFollowers: (mStats.totalFollowers || 0) + (mStats.totalIgFollowers || 0), totalCampaigns: mStats.totalCampaigns || 0, activeCampaigns: mStats.activeCampaigns || 0, totalImpressions: mStats.totalImpressions || 0, totalConversions: 0 }
+    : { totalReach: gStats.totalImpressions || 0, totalClicks: gStats.totalClicks || 0, totalSpend: gStats.totalCost || 0, totalFollowers: 0, totalCampaigns: gStats.totalCampaigns || 0, activeCampaigns: gStats.activeCampaigns || 0, totalImpressions: gStats.totalImpressions || 0, totalConversions: gStats.totalConversions || 0 };
+
+  const showCtr = showStats.totalImpressions > 0
+    ? Math.round((showStats.totalClicks / showStats.totalImpressions) * 10000) / 100
+    : 0;
+
+  const topCampaigns = metaData?.topCampaigns || [];
+  const pages = metaData?.pages || [];
+  const googleAccounts = googleData?.accounts || [];
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">التحليلات والإحصائيات</h1>
-          <p className="mt-1 text-slate-500">بيانات حقيقية • آخر 30 يوم</p>
+          <p className="mt-1 text-slate-500">
+            {[metaConnected && "Meta", googleConnected && "Google Ads"].filter(Boolean).join(" + ")} • آخر 30 يوم
+          </p>
         </div>
         <div className="flex gap-3">
-          <button onClick={fetchAnalytics} className="btn-secondary">
+          <Button variant="outline" onClick={fetchAnalytics}>
             <RefreshCw className="h-4 w-4" />
             تحديث البيانات
-          </button>
-          <button className="btn-primary">
-            <Sparkles className="h-4 w-4" />
-            تحليل AI شامل
-          </button>
+          </Button>
         </div>
       </div>
 
-      {/* Overall Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-blue-100 p-2.5 text-blue-600">
-              <Eye className="h-5 w-5" />
+      {/* Platform Tabs */}
+      <Tabs value={tab} onValueChange={(v) => setTab(v as "all" | "meta" | "google")}>
+        <TabsList>
+          <TabsTrigger value="all">الكل</TabsTrigger>
+          {metaConnected && <TabsTrigger value="meta">📘 Meta</TabsTrigger>}
+          {googleConnected && <TabsTrigger value="google">🔍 Google Ads</TabsTrigger>}
+        </TabsList>
+      </Tabs>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-blue-100 p-2.5 text-blue-600"><Eye className="h-5 w-5" /></div>
+              <div>
+                <p className="text-sm text-slate-500">إجمالي الوصول</p>
+                <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalReach)}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-slate-500">إجمالي الوصول</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">{formatNumber(stats?.totalReach || 0)}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600"><MousePointerClick className="h-5 w-5" /></div>
+              <div>
+                <p className="text-sm text-slate-500">إجمالي النقرات</p>
+                <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalClicks)}</p>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600">
-              <MousePointerClick className="h-5 w-5" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-purple-100 p-2.5 text-purple-600"><TrendingUp className="h-5 w-5" /></div>
+              <div>
+                <p className="text-sm text-slate-500">متوسط CTR</p>
+                <p className={cn("mt-1 text-2xl font-bold", showCtr >= 1 ? "text-emerald-600" : "text-amber-600")}>
+                  {showCtr}%
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-slate-500">إجمالي النقرات</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">{formatNumber(stats?.totalClicks || 0)}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-red-100 p-2.5 text-red-600"><DollarSign className="h-5 w-5" /></div>
+              <div>
+                <p className="text-sm text-slate-500">إجمالي الإنفاق</p>
+                <p className="mt-1 text-2xl font-bold text-slate-900">{formatCurrency(showStats.totalSpend)}</p>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-purple-100 p-2.5 text-purple-600">
-              <TrendingUp className="h-5 w-5" />
+          </CardContent>
+        </Card>
+        {(tab === "all" || tab === "meta") && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-amber-100 p-2.5 text-amber-600"><Users className="h-5 w-5" /></div>
+                <div>
+                  <p className="text-sm text-slate-500">إجمالي المتابعين</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalFollowers)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-indigo-100 p-2.5 text-indigo-600"><Megaphone className="h-5 w-5" /></div>
+              <div>
+                <p className="text-sm text-slate-500">الحملات</p>
+                <p className="mt-1 text-2xl font-bold text-slate-900">
+                  {showStats.activeCampaigns}
+                  <span className="text-base font-normal text-slate-400"> / {showStats.totalCampaigns}</span>
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-slate-500">متوسط CTR</p>
-              <p className={cn(
-                "mt-1 text-3xl font-bold",
-                (stats?.avgCtr || 0) >= 1 ? "text-emerald-600" : "text-amber-600"
-              )}>
-                {stats?.avgCtr || 0}%
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-amber-100 p-2.5 text-amber-600">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">إجمالي المتابعين</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">
-                {formatNumber((stats?.totalFollowers || 0) + (stats?.totalIgFollowers || 0))}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-red-100 p-2.5 text-red-600">
-              <DollarSign className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">إجمالي الإنفاق</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">{formatCurrency(stats?.totalSpend || 0)}</p>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-indigo-100 p-2.5 text-indigo-600">
-              <Megaphone className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">الحملات</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">
-                {stats?.activeCampaigns || 0}
-                <span className="text-base font-normal text-slate-400"> / {stats?.totalCampaigns || 0}</span>
-              </p>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+        {showStats.totalConversions > 0 && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600"><TrendingUp className="h-5 w-5" /></div>
+                <div>
+                  <p className="text-sm text-slate-500">التحويلات</p>
+                  <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalConversions)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* Top Campaigns */}
-        <div className="card p-6">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-primary-600" />
-            <h2 className="text-lg font-bold text-slate-900">أفضل الحملات أداءً</h2>
-          </div>
-          <div className="mt-6">
-            {topCampaigns.length > 0 ? (
+        {/* Top Meta Campaigns */}
+        {(tab === "all" || tab === "meta") && topCampaigns.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-primary-600" />
+                أفضل حملات Meta
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-100 text-sm text-slate-500">
@@ -225,42 +305,92 @@ export default function AnalyticsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {topCampaigns.map((c) => (
+                  {topCampaigns.map((c: any) => (
                     <tr key={c.id} className="border-b border-slate-50 text-sm">
                       <td className="py-3 font-semibold text-slate-900 max-w-[200px] truncate">{c.name}</td>
                       <td className="py-3 text-slate-600">{formatNumber(c.metrics.reach)}</td>
                       <td className="py-3 text-slate-600">{formatNumber(c.metrics.clicks)}</td>
                       <td className="py-3 text-slate-600">${Number(c.metrics.spend).toFixed(2)}</td>
                       <td className="py-3">
-                        <span className={cn(
-                          "rounded-full px-2.5 py-1 text-xs font-bold",
-                          Number(c.metrics.ctr) >= 1 ? "bg-emerald-100 text-emerald-700" :
-                          Number(c.metrics.ctr) >= 0.5 ? "bg-amber-100 text-amber-700" :
-                          "bg-red-100 text-red-700"
-                        )}>
+                        <Badge
+                          variant={
+                            Number(c.metrics.ctr) >= 1 ? "success" :
+                            Number(c.metrics.ctr) >= 0.5 ? "warning" :
+                            "destructive"
+                          }
+                          className="rounded-full"
+                        >
                           {Number(c.metrics.ctr).toFixed(2)}%
-                        </span>
+                        </Badge>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            ) : (
-              <p className="py-8 text-center text-sm text-slate-400">لا توجد حملات بعد</p>
-            )}
-          </div>
-        </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Google Ads Accounts */}
+        {(tab === "all" || tab === "google") && googleConnected && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5 text-primary-600" />
+                حسابات Google Ads
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {googleAccounts.length > 0 ? (
+                googleAccounts.map((account: any) => (
+                  <div key={account.id} className="flex items-center justify-between rounded-xl border border-slate-100 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+                        G
+                      </div>
+                      <div>
+                        <span className="text-sm font-semibold text-slate-700">{account.name}</span>
+                        <p className="text-xs text-slate-400">{account.currency}</p>
+                      </div>
+                    </div>
+                    <Badge variant="success">متصل</Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="py-8 text-center text-sm text-slate-400">لا توجد حسابات</p>
+              )}
+              <div className="mt-4 rounded-xl bg-slate-50 p-4">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-xs text-slate-500">الحملات</p>
+                    <p className="text-lg font-bold text-slate-900">{gStats.totalCampaigns || 0}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">الإنفاق</p>
+                    <p className="text-lg font-bold text-slate-900">{formatCurrency(gStats.totalCost || 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">التحويلات</p>
+                    <p className="text-lg font-bold text-slate-900">{formatNumber(gStats.totalConversions || 0)}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Pages Performance */}
-        <div className="card p-6">
-          <div className="flex items-center gap-2">
-            <Globe className="h-5 w-5 text-primary-600" />
-            <h2 className="text-lg font-bold text-slate-900">أداء الصفحات</h2>
-          </div>
-          <div className="mt-6 space-y-4">
-            {pages.length > 0 ? (
-              pages.map((page) => {
-                const total = (stats?.totalFollowers || 0) + (stats?.totalIgFollowers || 0);
+        {(tab === "all" || tab === "meta") && pages.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5 text-primary-600" />
+                أداء الصفحات
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {pages.map((page: PageInfo) => {
+                const total = (mStats.totalFollowers || 0) + (mStats.totalIgFollowers || 0);
                 const pageTotal = page.followers + page.igFollowers;
                 const pct = total > 0 ? Math.round((pageTotal / total) * 100) : 0;
 
@@ -295,12 +425,10 @@ export default function AnalyticsPage() {
                     </div>
                   </div>
                 );
-              })
-            ) : (
-              <p className="py-8 text-center text-sm text-slate-400">لا توجد صفحات متصلة</p>
-            )}
-          </div>
-        </div>
+              })}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

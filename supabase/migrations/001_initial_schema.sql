@@ -1,4 +1,4 @@
--- MarketPro Database Schema
+-- Satwa Database Schema
 -- Initial migration: Core tables for the digital marketing management system
 
 -- Enable required extensions

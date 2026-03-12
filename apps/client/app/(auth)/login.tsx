@@ -89,9 +89,9 @@ export default function LoginScreen() {
     >
       <View style={styles.header}>
         <View style={styles.logoCircle}>
-          <Text style={styles.logoText}>M</Text>
+          <Text style={styles.logoText}>س</Text>
         </View>
-        <Text style={styles.title}>MarketPro</Text>
+        <Text style={styles.title}>سطوة</Text>
         <Text style={styles.subtitle}>بوابة العميل</Text>
       </View>
 

@@ -1,5 +1,5 @@
 {
-  "name": "@marketpro/ai",
+  "name": "@satwa/ai",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "latest",
-    "@marketpro/shared": "*"
+    "@satwa/shared": "*"
   },
   "devDependencies": {
     "typescript": "latest"

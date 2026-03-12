@@ -37,82 +37,82 @@ export interface MetaAdAccount {
 }
 
 /**
- * Discovers pages accessible to the token.
- * Supports both System User tokens (via Business API) and User tokens (via /me/accounts).
+ * Discovers ALL pages accessible to the token.
+ * Combines /me/accounts (direct pages) + Business API (owned + client pages across all portfolios).
  */
 export async function discoverPages(token: string): Promise<MetaPage[]> {
   const fields = "id,name,category,followers_count,fan_count,picture{url},access_token,instagram_business_account{id,name,username,profile_picture_url,followers_count}";
+  const allPages: MetaPage[] = [];
 
-  // Strategy 1: /me/accounts (works for both user tokens and some system user tokens)
-  const directPages = await metaGet<{ data: any[] }>(`/me/accounts?fields=${fields}&limit=100`, token);
-  if (directPages?.data && directPages.data.length > 0) {
-    console.log(`[meta-api] Found ${directPages.data.length} pages via /me/accounts`);
-    return mapPages(directPages.data);
-  }
-
-  // Check who this token belongs to
   const me = await metaGet<{ id: string; name: string }>("/me?fields=id,name", token);
   console.log("[meta-api] Token identity:", JSON.stringify(me));
 
-  // Strategy 2: Get businesses, then get owned pages (System User flow)
-  console.log("[meta-api] /me/accounts returned 0 pages, trying Business API...");
-  const businesses = await metaGet<{ data: any[] }>("/me/businesses?fields=id,name&limit=10", token);
-  console.log("[meta-api] /me/businesses result:", JSON.stringify(businesses?.data?.map((b: any) => ({ id: b.id, name: b.name })) || "null"));
-  if (businesses?.data && businesses.data.length > 0) {
-    const allPages: MetaPage[] = [];
-    for (const biz of businesses.data) {
-      console.log(`[meta-api] Checking business: ${biz.name} (${biz.id})`);
+  // Source 1: /me/accounts — direct pages where user is admin
+  const directPages = await metaGet<{ data: any[] }>(`/me/accounts?fields=${fields}&limit=100`, token);
+  if (directPages?.data && directPages.data.length > 0) {
+    console.log(`[meta-api] Found ${directPages.data.length} pages via /me/accounts`);
+    allPages.push(...mapPages(directPages.data));
+  }
 
-      // Try owned_pages
+  // Source 2: Business API — pages across all portfolios (requires business_management scope)
+  const businesses = await metaGet<{ data: any[] }>("/me/businesses?fields=id,name&limit=50", token);
+  if (businesses?.data && businesses.data.length > 0) {
+    console.log(`[meta-api] Found ${businesses.data.length} business portfolios`);
+    for (const biz of businesses.data) {
       const owned = await metaGet<{ data: any[] }>(
         `/${biz.id}/owned_pages?fields=${fields}&limit=100`, token
       );
       if (owned?.data) {
-        console.log(`[meta-api] Found ${owned.data.length} owned pages in ${biz.name}`);
+        console.log(`[meta-api] ${biz.name}: ${owned.data.length} owned pages`);
         allPages.push(...mapPages(owned.data));
       }
 
-      // Try client_pages
       const client = await metaGet<{ data: any[] }>(
         `/${biz.id}/client_pages?fields=${fields}&limit=100`, token
       );
       if (client?.data) {
-        console.log(`[meta-api] Found ${client.data.length} client pages in ${biz.name}`);
+        console.log(`[meta-api] ${biz.name}: ${client.data.length} client pages`);
         allPages.push(...mapPages(client.data));
       }
     }
-
-    // Deduplicate by page ID
-    const seen = new Set<string>();
-    return allPages.filter((p) => {
-      if (seen.has(p.id)) return false;
-      seen.add(p.id);
-      return true;
-    });
   }
 
-  // Strategy 3: If we have the app_id, try direct page access
-  console.log("[meta-api] No businesses found either. Token may have limited access.");
-  return [];
+  if (allPages.length === 0) {
+    console.log("[meta-api] No pages found via any strategy.");
+    return [];
+  }
+
+  // Deduplicate by page ID
+  const seen = new Set<string>();
+  const unique = allPages.filter((p) => {
+    if (seen.has(p.id)) return false;
+    seen.add(p.id);
+    return true;
+  });
+
+  console.log(`[meta-api] Total unique pages: ${unique.length}`);
+  return unique;
 }
 
 /**
- * Discovers ad accounts accessible to the token.
+ * Discovers ALL ad accounts accessible to the token.
+ * Combines /me/adaccounts + Business API across all portfolios.
  */
 export async function discoverAdAccounts(token: string): Promise<MetaAdAccount[]> {
-  // Strategy 1: Direct
+  const allAccounts: MetaAdAccount[] = [];
+
+  // Source 1: Direct ad accounts
   const direct = await metaGet<{ data: any[] }>(
     "/me/adaccounts?fields=id,name,account_status,currency,balance,amount_spent,business_name&limit=50",
     token
   );
-  if (direct?.data && direct.data.length > 0) {
-    return mapAdAccounts(direct.data);
+  if (direct?.data) {
+    allAccounts.push(...mapAdAccounts(direct.data));
   }
 
-  // Strategy 2: Via businesses
-  const businesses = await metaGet<{ data: any[] }>("/me/businesses?fields=id,name&limit=10", token);
+  // Source 2: Via all business portfolios
+  const businesses = await metaGet<{ data: any[] }>("/me/businesses?fields=id,name&limit=50", token);
   if (businesses?.data) {
-    const allAccounts: MetaAdAccount[] = [];
     for (const biz of businesses.data) {
       const owned = await metaGet<{ data: any[] }>(
         `/${biz.id}/owned_ad_accounts?fields=id,name,account_status,currency,balance,amount_spent&limit=50`,
@@ -126,15 +126,15 @@ export async function discoverAdAccounts(token: string): Promise<MetaAdAccount[]
       );
       if (client?.data) allAccounts.push(...mapAdAccounts(client.data));
     }
-    const seen = new Set<string>();
-    return allAccounts.filter((a) => {
-      if (seen.has(a.id)) return false;
-      seen.add(a.id);
-      return true;
-    });
   }
 
-  return [];
+  // Deduplicate
+  const seen = new Set<string>();
+  return allAccounts.filter((a) => {
+    if (seen.has(a.id)) return false;
+    seen.add(a.id);
+    return true;
+  });
 }
 
 function mapPages(data: any[]): MetaPage[] {

@@ -46,6 +46,9 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 
+# Secrets
+client_secret_*.json
+
 # Supabase
 supabase/.temp/
 .vercel

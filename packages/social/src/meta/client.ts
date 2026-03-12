@@ -1,4 +1,4 @@
-import type { CampaignPerformance } from "@marketpro/shared";
+import type { CampaignPerformance } from "@satwa/shared";
 
 const META_API_VERSION = "v24.0";
 const META_API_BASE = `https://graph.facebook.com/${META_API_VERSION}`;

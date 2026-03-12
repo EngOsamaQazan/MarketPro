@@ -1,4 +1,4 @@
--- MarketPro Migration 002: API Keys table + username column
+-- Satwa Migration 002: API Keys table + username column
 -- Stores API keys in the database instead of environment variables
 
 -- Enable pgcrypto for password hashing

@@ -73,7 +73,7 @@ export function MonthlyReportPDF({
   budgetPlanned,
   budgetSpent,
   aiRecommendations,
-  agencyName = "MarketPro",
+  agencyName = "سطوة",
 }: ReportPDFProps) {
   const scoreColor = overallScore >= 8 ? "#16a34a" : overallScore >= 6 ? "#d97706" : "#dc2626";
 

@@ -1,5 +1,5 @@
 {
-  "name": "marketpro",
+  "name": "satwa",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
@@ -11,10 +11,10 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "dev:admin": "turbo dev --filter=@marketpro/admin",
-    "dev:client": "turbo dev --filter=@marketpro/client",
-    "build:admin": "turbo build --filter=@marketpro/admin",
-    "build:client": "turbo build --filter=@marketpro/client"
+    "dev:admin": "turbo dev --filter=@satwa/admin",
+    "dev:client": "turbo dev --filter=@satwa/client",
+    "build:admin": "turbo build --filter=@satwa/admin",
+    "build:client": "turbo build --filter=@satwa/client"
   },
   "dependencies": {
     "tailwindcss": "4.2.1",

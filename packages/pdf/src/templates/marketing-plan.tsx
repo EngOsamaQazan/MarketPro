@@ -68,7 +68,7 @@ export function MarketingPlanPDF({
   adCampaigns,
   budgetBreakdown,
   kpis,
-  agencyName = "MarketPro",
+  agencyName = "سطوة",
 }: PlanPDFProps) {
   return (
     <Document>

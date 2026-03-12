@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase";
-import type { Database } from "@marketpro/shared/src/types/database";
+import type { Database } from "@satwa/shared/src/types/database";
 
 type Tables = Database["public"]["Tables"];
 type TableName = keyof Tables;

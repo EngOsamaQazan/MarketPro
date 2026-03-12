@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { getAnthropicKey } from "@/lib/api-keys";
+import { requireAuth } from "@/lib/auth";
 
 const AUTO_MANAGER_SYSTEM = `أنت نظام إدارة تسويق رقمي مستقل يعمل بالذكاء الاصطناعي.
 أنت المدير التسويقي الذكي الذي يتخذ جميع القرارات بالنيابة عن فريق التسويق.
@@ -26,6 +27,9 @@ const AUTO_MANAGER_SYSTEM = `أنت نظام إدارة تسويق رقمي مس
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
+
     const apiKey = await getAnthropicKey();
     const anthropic = new Anthropic({ apiKey });
 

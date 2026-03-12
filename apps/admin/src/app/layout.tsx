@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MarketPro - لوحة إدارة التسويق الرقمي",
-  description: "نظام إدارة التسويق الرقمي الذكي",
+  title: "سطوة - لوحة إدارة التسويق الرقمي",
+  description: "سطوة — ذكاء اصطناعي يدير تسويقك",
 };
 
 export default function RootLayout({
@@ -19,7 +20,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

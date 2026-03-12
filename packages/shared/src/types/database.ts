@@ -9,11 +9,108 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      organizations: {
+        Row: {
+          id: string
+          name: string
+          name_en: string | null
+          slug: string
+          type: 'agency' | 'brand'
+          logo_url: string | null
+          website: string | null
+          plan: 'free' | 'starter' | 'pro' | 'enterprise'
+          plan_expires_at: string | null
+          settings: Json
+          limits: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          name: string
+          slug: string
+          id?: string
+          name_en?: string | null
+          type?: 'agency' | 'brand'
+          logo_url?: string | null
+          website?: string | null
+          plan?: 'free' | 'starter' | 'pro' | 'enterprise'
+          plan_expires_at?: string | null
+          settings?: Json
+          limits?: Json
+        }
+        Update: Partial<Database["public"]["Tables"]["organizations"]["Insert"]>
+      }
+      organization_members: {
+        Row: {
+          id: string
+          organization_id: string
+          user_id: string
+          role: 'owner' | 'admin' | 'manager' | 'viewer'
+          invited_by: string | null
+          invited_at: string | null
+          accepted_at: string | null
+          created_at: string
+        }
+        Insert: {
+          organization_id: string
+          user_id: string
+          role?: 'owner' | 'admin' | 'manager' | 'viewer'
+          invited_by?: string | null
+          accepted_at?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["organization_members"]["Insert"]>
+      }
+      subscription_plans: {
+        Row: {
+          id: string
+          name: string
+          name_ar: string
+          price_monthly: number
+          price_yearly: number
+          limits: Json
+          features: string[]
+          is_active: boolean
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          name_ar: string
+          price_monthly?: number
+          price_yearly?: number
+          limits?: Json
+          features?: string[]
+          is_active?: boolean
+          sort_order?: number
+        }
+        Update: Partial<Database["public"]["Tables"]["subscription_plans"]["Insert"]>
+      }
+      usage_logs: {
+        Row: {
+          id: string
+          organization_id: string
+          metric: string
+          count: number
+          period: string
+          metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          organization_id: string
+          metric: string
+          period: string
+          count?: number
+          metadata?: Json | null
+        }
+        Update: Partial<Database["public"]["Tables"]["usage_logs"]["Insert"]>
+      }
       ad_campaigns: {
         Row: {
           ai_optimizations: Json | null
           auto_optimize: boolean | null
           company_id: string
+          organization_id: string | null
           created_at: string
           created_by: string
           daily_budget: number
@@ -36,6 +133,7 @@ export type Database = {
           ai_optimizations?: Json | null
           auto_optimize?: boolean | null
           company_id: string
+          organization_id?: string | null
           created_at?: string
           created_by: string
           daily_budget?: number
@@ -71,6 +169,7 @@ export type Database = {
           monthly_budget: number
           name: string
           name_en: string | null
+          organization_id: string | null
           package_type: string
           status: string
           target_audience: string | null
@@ -90,6 +189,7 @@ export type Database = {
           monthly_budget?: number
           name: string
           name_en?: string | null
+          organization_id?: string | null
           package_type?: string
           status?: string
           target_audience?: string | null
@@ -101,11 +201,13 @@ export type Database = {
         Row: {
           avatar_url: string | null
           company_id: string | null
+          active_organization_id: string | null
           created_at: string
           email: string
           full_name: string
           id: string
           phone: string | null
+          push_token: string | null
           role: string
           updated_at: string
           username: string | null
@@ -113,10 +215,12 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           company_id?: string | null
+          active_organization_id?: string | null
           email: string
           full_name: string
           id: string
           phone?: string | null
+          push_token?: string | null
           role?: string
           username?: string | null
         }
@@ -129,6 +233,7 @@ export type Database = {
           key_name: string
           key_value: string
           is_active: boolean
+          organization_id: string | null
           created_by: string | null
           created_at: string
           updated_at: string
@@ -139,6 +244,7 @@ export type Database = {
           key_value: string
           id?: string
           is_active?: boolean
+          organization_id?: string | null
           created_by?: string | null
         }
         Update: Partial<Database["public"]["Tables"]["api_keys"]["Insert"]>
@@ -150,6 +256,7 @@ export type Database = {
           approved_by: string | null
           budget_breakdown: Json | null
           company_id: string
+          organization_id: string | null
           created_at: string
           created_by: string
           id: string
@@ -168,6 +275,7 @@ export type Database = {
           created_by: string
           month: string
           title: string
+          organization_id?: string | null
           total_budget?: number
           ai_analysis?: Json | null
           budget_breakdown?: Json | null
@@ -185,6 +293,7 @@ export type Database = {
           approval_note: string | null
           approval_status: string
           company_id: string
+          organization_id: string | null
           content_type: string
           created_at: string
           created_by: string
@@ -203,6 +312,7 @@ export type Database = {
         }
         Insert: {
           company_id: string
+          organization_id?: string | null
           content_type: string
           created_by: string
           platform: string
@@ -221,6 +331,7 @@ export type Database = {
       monthly_reports: {
         Row: {
           company_id: string
+          organization_id: string | null
           created_at: string
           id: string
           month: string
@@ -234,6 +345,7 @@ export type Database = {
         }
         Insert: {
           company_id: string
+          organization_id?: string | null
           month: string
           report_data?: Json
           plan_id?: string | null
@@ -247,6 +359,7 @@ export type Database = {
           action_url: string | null
           body: string
           company_id: string | null
+          organization_id: string | null
           created_at: string
           data: Json | null
           id: string
@@ -261,10 +374,97 @@ export type Database = {
           type: string
           user_id: string
           company_id?: string | null
+          organization_id?: string | null
           data?: Json | null
           action_url?: string | null
         }
         Update: Partial<Database["public"]["Tables"]["notifications"]["Insert"]>
+      }
+      conversations: {
+        Row: {
+          id: string
+          company_id: string
+          organization_id: string | null
+          title: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          organization_id?: string | null
+          title?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["conversations"]["Insert"]>
+      }
+      messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          organization_id: string | null
+          sender_id: string
+          content: string
+          created_at: string
+        }
+        Insert: {
+          conversation_id: string
+          organization_id?: string | null
+          sender_id: string
+          content: string
+        }
+        Update: Partial<Database["public"]["Tables"]["messages"]["Insert"]>
+      }
+      ai_activity_log: {
+        Row: {
+          id: string
+          action_type: string
+          action_data: Json | null
+          result: Json | null
+          tokens_used: number | null
+          cost_estimate: number | null
+          created_by: string | null
+          company_id: string | null
+          organization_id: string | null
+          created_at: string
+        }
+        Insert: {
+          action_type: string
+          action_data?: Json | null
+          result?: Json | null
+          tokens_used?: number | null
+          cost_estimate?: number | null
+          created_by?: string | null
+          company_id?: string | null
+          organization_id?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["ai_activity_log"]["Insert"]>
+      }
+      invoices: {
+        Row: {
+          id: string
+          company_id: string
+          organization_id: string | null
+          amount: number
+          month: string
+          description: string | null
+          due_date: string
+          items: Json | null
+          status: string
+          created_at: string
+          updated_at: string
+          sent_at: string | null
+          paid_at: string | null
+        }
+        Insert: {
+          company_id: string
+          organization_id?: string | null
+          amount: number
+          month: string
+          due_date: string
+          description?: string | null
+          items?: Json | null
+          status?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["invoices"]["Insert"]>
       }
       social_accounts: {
         Row: {
@@ -272,6 +472,7 @@ export type Database = {
           account_id: string
           account_name: string
           company_id: string
+          organization_id: string | null
           created_at: string
           followers_count: number | null
           id: string
@@ -288,6 +489,7 @@ export type Database = {
           account_id: string
           account_name: string
           company_id: string
+          organization_id?: string | null
           platform: string
           followers_count?: number | null
           permissions?: string[] | null
@@ -296,9 +498,84 @@ export type Database = {
         }
         Update: Partial<Database["public"]["Tables"]["social_accounts"]["Insert"]>
       }
+      platform_statistics: {
+        Row: {
+          id: string
+          country_code: string
+          country_name: string
+          platform: string
+          users_count: number | null
+          penetration_rate: number | null
+          rank_in_country: number | null
+          peak_hours: string[] | null
+          demographics: Json | null
+          source: string | null
+          report_date: string
+          updated_at: string
+        }
+        Insert: {
+          country_code: string
+          country_name: string
+          platform: string
+          report_date: string
+          id?: string
+          users_count?: number | null
+          penetration_rate?: number | null
+          rank_in_country?: number | null
+          peak_hours?: string[] | null
+          demographics?: Json | null
+          source?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["platform_statistics"]["Insert"]>
+      }
+      ads: {
+        Row: {
+          id: string
+          campaign_id: string
+          organization_id: string | null
+          platform_ad_id: string | null
+          name: string
+          ad_type: string
+          headline: string | null
+          body_text: string | null
+          call_to_action: string | null
+          media_urls: string[] | null
+          landing_url: string | null
+          status: string
+          performance_data: Json | null
+          ab_test_variant: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          name: string
+          ad_type: string
+          organization_id?: string | null
+          platform_ad_id?: string | null
+          headline?: string | null
+          body_text?: string | null
+          call_to_action?: string | null
+          media_urls?: string[] | null
+          landing_url?: string | null
+          status?: string
+          performance_data?: Json | null
+          ab_test_variant?: string | null
+        }
+        Update: Partial<Database["public"]["Tables"]["ads"]["Insert"]>
+      }
     }
     Views: Record<string, never>
-    Functions: Record<string, never>
+    Functions: {
+      get_user_org_ids: {
+        Args: Record<string, never>
+        Returns: string[]
+      }
+      get_active_org_id: {
+        Args: Record<string, never>
+        Returns: string | null
+      }
+    }
     Enums: Record<string, never>
   }
 }

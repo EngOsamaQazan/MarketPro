@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getServiceKeys, getApiKey } from "@/lib/api-keys";
 import { discoverPages } from "@/lib/meta-api";
 import { validateApiKey } from "@/lib/youtube-api";
+import { refreshAccessToken, discoverAccounts } from "@/lib/google-ads-api";
 
 export const dynamic = "force-dynamic";
 
@@ -81,35 +82,81 @@ async function checkGoogle(): Promise<PlatformStatus[]> {
   const platforms: PlatformStatus[] = [];
 
   const apiKey = await getApiKey("google", "api_key");
-  if (!apiKey) {
-    platforms.push(
-      { id: "youtube", name: "YouTube", nameAr: "يوتيوب", icon: "youtube", connected: false },
-      { id: "google_ads", name: "Google Ads", nameAr: "إعلانات جوجل", icon: "google", connected: false },
-    );
-    return platforms;
+  if (apiKey) {
+    try {
+      const ytValid = await validateApiKey(apiKey);
+      platforms.push({
+        id: "youtube",
+        name: "YouTube",
+        nameAr: "يوتيوب",
+        icon: "youtube",
+        connected: ytValid,
+        accountName: ytValid ? "API متصل" : undefined,
+      });
+    } catch (e: any) {
+      platforms.push({ id: "youtube", name: "YouTube", nameAr: "يوتيوب", icon: "youtube", connected: false, error: e.message });
+    }
+  } else {
+    platforms.push({ id: "youtube", name: "YouTube", nameAr: "يوتيوب", icon: "youtube", connected: false });
   }
 
   try {
-    const ytValid = await validateApiKey(apiKey);
-    platforms.push({
-      id: "youtube",
-      name: "YouTube",
-      nameAr: "يوتيوب",
-      icon: "youtube",
-      connected: ytValid,
-      accountName: ytValid ? "API متصل" : undefined,
-    });
+    const adsKeys = await getServiceKeys("google_ads");
+    const { developer_token, client_id, client_secret, refresh_token } = adsKeys;
+    if (developer_token && client_id && client_secret && refresh_token) {
+      const accessToken = await refreshAccessToken(client_id, client_secret, refresh_token);
+      if (accessToken) {
+        const mccId = adsKeys.mcc_id;
+        const accounts = await discoverAccounts(developer_token, accessToken, mccId, adsKeys.managed_accounts);
+        const clientAccounts = accounts.filter((a) => !a.manager);
+        platforms.push({
+          id: "google_ads",
+          name: "Google Ads",
+          nameAr: "إعلانات جوجل",
+          icon: "google",
+          connected: clientAccounts.length > 0,
+          accountName: `${clientAccounts.length} حساب إعلاني`,
+          stats: { accounts: clientAccounts.length },
+        });
+      } else {
+        platforms.push({
+          id: "google_ads",
+          name: "Google Ads",
+          nameAr: "إعلانات جوجل",
+          icon: "google",
+          connected: false,
+          error: "فشل تجديد رمز الوصول",
+        });
+      }
+    } else if (developer_token) {
+      platforms.push({
+        id: "google_ads",
+        name: "Google Ads",
+        nameAr: "إعلانات جوجل",
+        icon: "google",
+        connected: false,
+        accountName: "Developer Token فقط — يلزم OAuth",
+      });
+    } else {
+      platforms.push({
+        id: "google_ads",
+        name: "Google Ads",
+        nameAr: "إعلانات جوجل",
+        icon: "google",
+        connected: false,
+      });
+    }
   } catch (e: any) {
-    platforms.push({ id: "youtube", name: "YouTube", nameAr: "يوتيوب", icon: "youtube", connected: false, error: e.message });
+    console.error("[platforms] Google Ads check error:", e.message);
+    platforms.push({
+      id: "google_ads",
+      name: "Google Ads",
+      nameAr: "إعلانات جوجل",
+      icon: "google",
+      connected: false,
+      error: e.message,
+    });
   }
-
-  platforms.push({
-    id: "google_ads",
-    name: "Google Ads",
-    nameAr: "إعلانات جوجل",
-    icon: "google",
-    connected: false,
-  });
 
   return platforms;
 }

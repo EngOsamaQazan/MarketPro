@@ -1,5 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
-import type { Database } from "@marketpro/shared/src/types/database";
+import type { Database } from "@satwa/shared/src/types/database";
 
 export function createClient() {
   return createBrowserClient<Database>(

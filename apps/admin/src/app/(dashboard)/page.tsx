@@ -1,63 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Users,
   Megaphone,
   TrendingUp,
   DollarSign,
-  ArrowUpLeft,
   CalendarDays,
   FileText,
   Sparkles,
-  Eye,
-  MousePointerClick,
-  UserPlus,
   Loader2,
-  WifiOff,
   Link2,
   RefreshCw,
-  AlertTriangle,
+  BarChart3,
+  Clock,
+  Building2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cn, formatNumber, formatCurrency } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useClient } from "@/components/providers/client-context";
+import { useOrg } from "@/components/providers/org-context";
 
-interface PlatformInfo {
-  id: string;
-  name: string;
-  nameAr: string;
-  connected: boolean;
-  stats?: Record<string, any>;
+interface DashboardStats {
+  total_clients: number;
+  active_clients: number;
+  total_monthly_revenue: number;
+  total_posts_this_month: number;
+  published_posts: number;
+  scheduled_posts: number;
+  active_campaigns: number;
+  total_ad_spend: number;
+  total_ad_budget: number;
+  active_plans: number;
+  connected_accounts: number;
+  total_followers: number;
 }
 
-interface OverviewData {
-  connected: boolean;
-  stats?: {
-    totalPages: number;
-    totalFollowers: number;
-    totalIgFollowers: number;
-    totalAdAccounts: number;
-    totalCampaigns: number;
-    activeCampaigns: number;
-    totalReach: number;
-    totalImpressions: number;
-    totalClicks: number;
-    totalSpend: number;
-    avgCtr: number;
+interface PlatformBreakdown {
+  [key: string]: {
+    posts: number;
+    campaigns: number;
+    accounts: number;
+    followers: number;
   };
-  pages?: { id: string; name: string; followers: number; picture?: string; igUsername?: string; igFollowers: number }[];
-  topCampaigns?: any[];
 }
-
-const platformColors: Record<string, string> = {
-  facebook: "#1877F2",
-  instagram: "#E4405F",
-  google_ads: "#4285F4",
-  youtube: "#FF0000",
-  tiktok: "#000000",
-  x: "#1DA1F2",
-  snapchat: "#FFFC00",
-  linkedin: "#0A66C2",
-};
 
 const quickActions = [
   {
@@ -65,208 +56,225 @@ const quickActions = [
     title: "إنشاء خطة بالذكاء الاصطناعي",
     description: "أنشئ خطة تسويق شهرية كاملة",
     color: "from-purple-500 to-indigo-600",
+    href: "/plans",
   },
   {
     icon: CalendarDays,
     title: "جدولة محتوى",
     description: "أضف منشورات للتقويم",
     color: "from-emerald-500 to-teal-600",
+    href: "/content",
   },
   {
     icon: Megaphone,
     title: "إطلاق حملة إعلانية",
     description: "أنشئ حملة على أي منصة",
     color: "from-blue-500 to-cyan-600",
+    href: "/campaigns",
   },
   {
     icon: FileText,
     title: "إنشاء تقرير",
     description: "أنشئ تقرير أداء شهري PDF",
     color: "from-amber-500 to-orange-600",
+    href: "/reports",
   },
 ];
 
+const PLATFORM_LABELS: Record<string, string> = {
+  facebook: "فيسبوك",
+  instagram: "إنستغرام",
+  meta: "ميتا",
+  tiktok: "تيك توك",
+  snapchat: "سناب شات",
+  x: "إكس",
+  linkedin: "لينكدإن",
+  youtube: "يوتيوب",
+  google_ads: "Google Ads",
+};
+
+const PLATFORM_COLORS: Record<string, string> = {
+  facebook: "bg-blue-100 text-blue-600",
+  instagram: "bg-pink-100 text-pink-600",
+  meta: "bg-blue-100 text-blue-600",
+  tiktok: "bg-slate-100 text-slate-800",
+  snapchat: "bg-yellow-100 text-yellow-600",
+  x: "bg-sky-100 text-sky-600",
+  linkedin: "bg-indigo-100 text-indigo-600",
+  youtube: "bg-red-100 text-red-600",
+  google_ads: "bg-green-100 text-green-600",
+};
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <Skeleton className="h-10 w-24" />
+      </div>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardContent className="p-6">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="mt-3 h-8 w-20" />
+              <Skeleton className="mt-4 h-4 w-32" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
-  const [platforms, setPlatforms] = useState<PlatformInfo[]>([]);
-  const [overview, setOverview] = useState<OverviewData | null>(null);
+  const router = useRouter();
+  const { selectedClientId, selectedClient } = useClient();
+  const { org } = useOrg();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [platformBreakdown, setPlatformBreakdown] = useState<PlatformBreakdown>({});
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
-      const [platformsRes, overviewRes] = await Promise.all([
-        fetch("/api/platforms", { credentials: "include" }),
-        fetch("/api/meta/overview", { credentials: "include" }),
-      ]);
-
-      const platformsData = await platformsRes.json();
-      const overviewData = await overviewRes.json();
-
-      console.log("[Dashboard] Platforms response:", JSON.stringify(platformsData).substring(0, 500));
-      console.log("[Dashboard] Overview response:", JSON.stringify(overviewData).substring(0, 500));
-
-      if (platformsData.error) {
-        setError(`Platforms: ${platformsData.error}`);
-      }
-      if (overviewData.error) {
-        setError((prev) => (prev ? `${prev} | Overview: ${overviewData.error}` : `Overview: ${overviewData.error}`));
-      }
-      if (overviewData.debug) {
-        setError((prev) => (prev ? `${prev} | Debug: ${overviewData.debug}` : `Debug: ${overviewData.debug}`));
-      }
-
-      setPlatforms(platformsData.platforms || []);
-      setOverview(overviewData);
-    } catch (e: any) {
-      setError(e.message);
+      const url = selectedClientId
+        ? `/api/dashboard?client_id=${selectedClientId}`
+        : "/api/dashboard";
+      const res = await fetch(url);
+      const data = await res.json();
+      setStats(data.stats || null);
+      setPlatformBreakdown(data.platform_breakdown || {});
+      setRecentActivity(data.recent_activity || []);
+      setCompanies(data.companies || []);
+    } catch {
+      setStats(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedClientId]);
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const connectedPlatforms = platforms.filter((p) => p.connected);
-  const stats = overview?.stats;
+  if (loading) return <DashboardSkeleton />;
 
-  if (loading) {
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-          <p className="text-sm text-slate-500">جاري تحميل البيانات...</p>
-        </div>
-      </div>
-    );
-  }
+  const pageTitle = selectedClient
+    ? `لوحة تحكم ${selectedClient.name}`
+    : "لوحة التحكم الرئيسية";
+
+  const pageSubtitle = selectedClient
+    ? `${selectedClient.industry} • ${formatCurrency(selectedClient.monthly_budget)}/شهر`
+    : `${org?.name || "سطوة"} • ${stats?.active_clients || 0} عميل نشط`;
 
   return (
     <div className="space-y-8">
-      {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
-            مرحباً بك في MarketPro 👋
-          </h1>
-          <p className="mt-1 text-slate-500">
-            {connectedPlatforms.length > 0
-              ? `${connectedPlatforms.length} منصة متصلة • بيانات حقيقية`
-              : "لا توجد منصات متصلة حالياً"}
-          </p>
+          <h1 className="text-2xl font-bold text-slate-900">{pageTitle}</h1>
+          <p className="mt-1 text-slate-500">{pageSubtitle}</p>
         </div>
-        <button onClick={fetchData} className="btn-secondary">
+        <Button variant="outline" onClick={fetchData}>
           <RefreshCw className="h-4 w-4" />
           تحديث
-        </button>
+        </Button>
       </div>
 
-      {/* Debug Error Banner */}
-      {error && (
-        <div className="card border-red-200 bg-red-50 p-4">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 h-5 w-5 text-red-500" />
-            <div>
-              <h3 className="font-bold text-red-800">خطأ في جلب البيانات</h3>
-              <p className="mt-1 text-sm text-red-700 font-mono break-all">{error}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Connected Platforms Banner */}
-      {connectedPlatforms.length === 0 && !error && (
-        <div className="card border-amber-200 bg-amber-50 p-6">
-          <div className="flex items-center gap-4">
-            <div className="rounded-xl bg-amber-100 p-3">
-              <Link2 className="h-6 w-6 text-amber-600" />
-            </div>
-            <div>
-              <h3 className="font-bold text-amber-800">لم يتم ربط أي منصة بعد</h3>
-              <p className="mt-1 text-sm text-amber-700">
-                اذهب إلى الإعدادات وأضف مفاتيح API للمنصات التي تريد إدارتها (Meta, Google, TikTok, etc.)
-              </p>
-            </div>
-          </div>
-        </div>
+      {!stats?.connected_accounts && !selectedClientId && (
+        <Alert variant="warning">
+          <Link2 className="h-5 w-5" />
+          <AlertTitle>لم يتم ربط أي حساب بعد</AlertTitle>
+          <AlertDescription>
+            اذهب إلى صفحة العملاء واربط حسابات التواصل الاجتماعي لبدء الإدارة
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="stat-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-slate-500">إجمالي المتابعين</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
-                {formatNumber((stats?.totalFollowers || 0) + (stats?.totalIgFollowers || 0))}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {!selectedClientId && (
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">العملاء</p>
+                  <p className="mt-2 text-3xl font-bold text-slate-900">
+                    {stats?.active_clients || 0}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-blue-100 p-3 text-blue-600">
+                  <Building2 className="h-5 w-5" />
+                </div>
+              </div>
+              <p className="mt-3 text-sm text-slate-400">
+                إيرادات شهرية: {formatCurrency(stats?.total_monthly_revenue || 0)}
               </p>
-            </div>
-            <div className="rounded-xl bg-blue-500 p-3 text-white shadow-lg">
-              <Users className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center gap-1.5">
-            <span className="text-sm text-slate-400">
-              FB: {formatNumber(stats?.totalFollowers || 0)} • IG: {formatNumber(stats?.totalIgFollowers || 0)}
-            </span>
-          </div>
-        </div>
+            </CardContent>
+          </Card>
+        )}
 
-        <div className="stat-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-slate-500">الحملات النشطة</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
-                {stats?.activeCampaigns || 0}
-              </p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-slate-500">المنشورات هذا الشهر</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
+                  {stats?.total_posts_this_month || 0}
+                </p>
+              </div>
+              <div className="rounded-xl bg-emerald-100 p-3 text-emerald-600">
+                <CalendarDays className="h-5 w-5" />
+              </div>
             </div>
-            <div className="rounded-xl bg-emerald-500 p-3 text-white shadow-lg">
-              <Megaphone className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center gap-1.5">
-            <span className="text-sm text-slate-400">
-              من أصل {stats?.totalCampaigns || 0} حملة
-            </span>
-          </div>
-        </div>
+            <p className="mt-3 text-sm text-slate-400">
+              منشور: {stats?.published_posts || 0} • مجدول: {stats?.scheduled_posts || 0}
+            </p>
+          </CardContent>
+        </Card>
 
-        <div className="stat-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-slate-500">إجمالي الإنفاق</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
-                {formatCurrency(stats?.totalSpend || 0)}
-              </p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-slate-500">الحملات النشطة</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
+                  {stats?.active_campaigns || 0}
+                </p>
+              </div>
+              <div className="rounded-xl bg-purple-100 p-3 text-purple-600">
+                <Megaphone className="h-5 w-5" />
+              </div>
             </div>
-            <div className="rounded-xl bg-purple-500 p-3 text-white shadow-lg">
-              <DollarSign className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center gap-1.5">
-            <span className="text-sm text-slate-400">آخر 30 يوم</span>
-          </div>
-        </div>
+            <p className="mt-3 text-sm text-slate-400">
+              إنفاق: {formatCurrency(stats?.total_ad_spend || 0)} / {formatCurrency(stats?.total_ad_budget || 0)}
+            </p>
+          </CardContent>
+        </Card>
 
-        <div className="stat-card">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-slate-500">إجمالي الوصول</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
-                {formatNumber(stats?.totalReach || 0)}
-              </p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-slate-500">الحسابات المتصلة</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
+                  {stats?.connected_accounts || 0}
+                </p>
+              </div>
+              <div className="rounded-xl bg-amber-100 p-3 text-amber-600">
+                <TrendingUp className="h-5 w-5" />
+              </div>
             </div>
-            <div className="rounded-xl bg-amber-500 p-3 text-white shadow-lg">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center gap-1.5">
-            <span className="text-sm text-slate-400">
-              نقرات: {formatNumber(stats?.totalClicks || 0)} • CTR: {stats?.avgCtr || 0}%
-            </span>
-          </div>
-        </div>
+            <p className="mt-3 text-sm text-slate-400">
+              {formatNumber(stats?.total_followers || 0)} متابع
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Quick Actions */}
@@ -274,115 +282,137 @@ export default function DashboardPage() {
         <h2 className="mb-4 text-lg font-bold text-slate-900">إجراءات سريعة</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {quickActions.map((action) => (
-            <button
+            <Card
               key={action.title}
-              className="group card flex flex-col items-start p-5 text-right transition-all hover:shadow-lg hover:-translate-y-0.5"
+              className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-0.5"
+              onClick={() => router.push(action.href)}
             >
-              <div
-                className={cn(
-                  "rounded-xl bg-gradient-to-br p-3 text-white shadow-lg",
-                  action.color
-                )}
-              >
-                <action.icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 text-sm font-bold text-slate-900">
-                {action.title}
-              </h3>
-              <p className="mt-1 text-xs text-slate-500">
-                {action.description}
-              </p>
-            </button>
+              <CardContent className="flex flex-col items-start p-5 text-right">
+                <div className={cn("rounded-xl bg-gradient-to-br p-3 text-white shadow-lg", action.color)}>
+                  <action.icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 text-sm font-bold text-slate-900">{action.title}</h3>
+                <p className="mt-1 text-xs text-slate-500">{action.description}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Platform Performance */}
-        <div className="card p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-slate-900">حالة المنصات</h2>
-          <p className="text-sm text-slate-500">{connectedPlatforms.length} متصلة من {platforms.length}</p>
-          <div className="mt-6 space-y-4">
-            {platforms.map((platform) => (
-              <div key={platform.id} className="flex items-center justify-between rounded-xl border border-slate-100 p-4">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: platformColors[platform.id] || "#94a3b8" }}
-                  />
-                  <span className="text-sm font-semibold text-slate-700">
-                    {platform.nameAr}
-                  </span>
-                </div>
-                <div className="flex items-center gap-4">
-                  {platform.connected ? (
-                    <>
-                      {platform.stats?.followers && (
-                        <span className="flex items-center gap-1.5 text-sm text-slate-500">
-                          <Users className="h-3.5 w-3.5" />
-                          {formatNumber(platform.stats.followers)}
-                        </span>
-                      )}
-                      {platform.stats?.pages && (
-                        <span className="flex items-center gap-1.5 text-sm text-slate-500">
-                          <FileText className="h-3.5 w-3.5" />
-                          {platform.stats.pages} صفحة
-                        </span>
-                      )}
-                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-                        متصل
-                      </span>
-                    </>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      {(platform as any).error && (
-                        <span className="text-xs text-red-500 max-w-[200px] truncate" title={(platform as any).error}>
-                          {(platform as any).error}
-                        </span>
-                      )}
-                      <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-500">
-                        غير متصل
+        {/* Platform Breakdown */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>توزيع المنصات</CardTitle>
+            <CardDescription>المنشورات والحملات حسب المنصة</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {Object.keys(platformBreakdown).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(platformBreakdown).map(([platform, data]) => (
+                  <div key={platform} className="flex items-center justify-between rounded-xl border border-slate-100 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("rounded-lg p-2", PLATFORM_COLORS[platform] || "bg-slate-100 text-slate-600")}>
+                        <BarChart3 className="h-4 w-4" />
+                      </div>
+                      <span className="text-sm font-semibold text-slate-700">
+                        {PLATFORM_LABELS[platform] || platform}
                       </span>
                     </div>
-                  )}
-                </div>
+                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                      {data.posts > 0 && (
+                        <span>{data.posts} منشور</span>
+                      )}
+                      {data.campaigns > 0 && (
+                        <span>{data.campaigns} حملة</span>
+                      )}
+                      {data.accounts > 0 && (
+                        <Badge variant="success">{data.accounts} حساب</Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Pages & Accounts */}
-        <div className="card p-6">
-          <h2 className="text-lg font-bold text-slate-900">الصفحات المتصلة</h2>
-          <p className="text-sm text-slate-500">من Meta</p>
-          <div className="mt-6 space-y-4">
-            {overview?.pages && overview.pages.length > 0 ? (
-              overview.pages.map((page) => (
-                <div key={page.id} className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 overflow-hidden">
-                    {page.picture ? (
-                      <img src={page.picture} alt={page.name} className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="text-lg font-bold text-blue-600">{page.name.charAt(0)}</span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-slate-700">{page.name}</p>
-                    <p className="text-xs text-slate-400">
-                      {formatNumber(page.followers)} متابع
-                      {page.igUsername && ` • IG: @${page.igUsername}`}
-                    </p>
-                  </div>
-                </div>
-              ))
             ) : (
               <div className="flex flex-col items-center gap-2 py-8 text-center">
-                <WifiOff className="h-8 w-8 text-slate-300" />
-                <p className="text-sm text-slate-400">لم يتم ربط أي صفحة</p>
+                <BarChart3 className="h-8 w-8 text-slate-300" />
+                <p className="text-sm text-slate-400">لا توجد بيانات حالياً</p>
               </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity or Client List */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{selectedClientId ? "النشاط الأخير" : "العملاء"}</CardTitle>
+            <CardDescription>
+              {selectedClientId ? "نشاط الذكاء الاصطناعي" : `${stats?.total_clients || 0} عميل`}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {selectedClientId ? (
+              recentActivity.length > 0 ? (
+                <div className="space-y-4">
+                  {recentActivity.slice(0, 5).map((activity: any) => (
+                    <div key={activity.id} className="flex items-start gap-3 text-right">
+                      <div className="rounded-lg bg-purple-100 p-2 text-purple-600">
+                        <Sparkles className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-700 truncate">
+                          {activity.action_type}
+                        </p>
+                        <p className="text-xs text-slate-400">
+                          {new Date(activity.created_at).toLocaleDateString("ar-SA", {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-2 py-8 text-center">
+                  <Clock className="h-8 w-8 text-slate-300" />
+                  <p className="text-sm text-slate-400">لا يوجد نشاط بعد</p>
+                </div>
+              )
+            ) : companies.length > 0 ? (
+              <div className="space-y-3">
+                {companies.map((company: any) => (
+                  <button
+                    key={company.id}
+                    onClick={() => router.push(`/clients/${company.id}`)}
+                    className="flex w-full items-center gap-3 rounded-xl border border-slate-100 p-3 text-right hover:bg-slate-50 transition-colors"
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600">
+                      {company.name.charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-700 truncate">{company.name}</p>
+                      <p className="text-xs text-slate-400">{company.industry}</p>
+                    </div>
+                    <Badge variant={company.status === "active" ? "success" : "secondary"}>
+                      {company.status === "active" ? "نشط" : company.status}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2 py-8 text-center">
+                <Building2 className="h-8 w-8 text-slate-300" />
+                <p className="text-sm text-slate-400">لا يوجد عملاء</p>
+                <Button size="sm" onClick={() => router.push("/clients")}>
+                  إضافة عميل
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

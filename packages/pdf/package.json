@@ -1,5 +1,5 @@
 {
-  "name": "@marketpro/pdf",
+  "name": "@satwa/pdf",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@react-pdf/renderer": "latest",
-    "@marketpro/shared": "*",
+    "@satwa/shared": "*",
     "react": "latest"
   },
   "devDependencies": {

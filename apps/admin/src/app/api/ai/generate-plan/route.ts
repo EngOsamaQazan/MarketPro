@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { PLAN_GENERATOR_SYSTEM_PROMPT, buildPlanPrompt } from "@marketpro/ai";
+import { PLAN_GENERATOR_SYSTEM_PROMPT, buildPlanPrompt } from "@satwa/ai";
 import { getAnthropicKey } from "@/lib/api-keys";
+import { requireAuth } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await requireAuth();
+    if (auth.error) return auth.error;
+
     const apiKey = await getAnthropicKey();
     const anthropic = new Anthropic({ apiKey });
 

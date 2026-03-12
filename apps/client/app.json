@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "MarketPro",
-    "slug": "marketpro-client",
+    "name": "سطوة",
+    "slug": "satwa-client",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "marketpro",
+    "scheme": "satwa",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "splash": {
@@ -12,14 +12,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.marketpro.client"
+      "bundleIdentifier": "ai.satwa.client"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#2563eb"
       },
-      "package": "com.marketpro.client"
+      "package": "ai.satwa.client"
     },
     "plugins": [
       "expo-router",

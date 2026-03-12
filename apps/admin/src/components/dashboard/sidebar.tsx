@@ -16,8 +16,10 @@ import {
   Sparkles,
   LogOut,
   ChevronLeft,
+  Receipt,
+  Bot,
 } from "lucide-react";
-import { useState } from "react";
+import { useSidebar } from "./sidebar-context";
 
 const navItems = [
   { href: "/", label: "لوحة التحكم", icon: LayoutDashboard },
@@ -27,13 +29,15 @@ const navItems = [
   { href: "/campaigns", label: "الحملات الإعلانية", icon: Megaphone },
   { href: "/reports", label: "التقارير", icon: BarChart3 },
   { href: "/analytics", label: "التحليلات", icon: TrendingUp },
+  { href: "/automation", label: "الأتمتة", icon: Bot },
+  { href: "/billing", label: "الفوترة", icon: Receipt },
   { href: "/settings", label: "الإعدادات", icon: Settings },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, toggle } = useSidebar();
   const supabase = createClient();
 
   async function handleLogout() {
@@ -56,8 +60,8 @@ export function Sidebar() {
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-slate-900">MarketPro</h1>
-              <p className="text-[11px] text-slate-400">إدارة التسويق الذكي</p>
+              <h1 className="text-lg font-bold text-slate-900">سطوة</h1>
+              <p className="text-[11px] text-slate-400">ذكاء اصطناعي يدير تسويقك</p>
             </div>
           </div>
         )}
@@ -67,7 +71,7 @@ export function Sidebar() {
           </div>
         )}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={toggle}
           className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
         >
           <ChevronLeft
