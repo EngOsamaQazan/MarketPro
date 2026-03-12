@@ -128,9 +128,9 @@ export default function AnalyticsPage() {
     return (
       <div className="flex h-96 items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center">
-          <WifiOff className="h-12 w-12 text-slate-300" />
-          <h2 className="text-xl font-bold text-slate-700">لا توجد بيانات تحليلية</h2>
-          <p className="max-w-md text-sm text-slate-500">
+          <WifiOff className="h-12 w-12 text-text-muted" />
+          <h2 className="text-xl font-bold text-text-secondary">لا توجد بيانات تحليلية</h2>
+          <p className="max-w-md text-sm text-text-muted">
             لعرض التحليلات، يرجى ربط المنصات من صفحة الإعدادات
           </p>
         </div>
@@ -171,8 +171,8 @@ export default function AnalyticsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">التحليلات والإحصائيات</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">التحليلات والإحصائيات</h1>
+          <p className="mt-1 text-text-muted">
             {[metaConnected && "Meta", googleConnected && "Google Ads"].filter(Boolean).join(" + ")} • آخر 30 يوم
           </p>
         </div>
@@ -198,10 +198,10 @@ export default function AnalyticsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-blue-100 p-2.5 text-blue-600"><Eye className="h-5 w-5" /></div>
+              <div className="rounded-xl bg-blue-500/15 p-2.5 text-blue-400"><Eye className="h-5 w-5" /></div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي الوصول</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalReach)}</p>
+                <p className="text-sm text-text-muted">إجمالي الوصول</p>
+                <p className="mt-1 text-2xl font-bold text-text-primary">{formatNumber(showStats.totalReach)}</p>
               </div>
             </div>
           </CardContent>
@@ -209,10 +209,10 @@ export default function AnalyticsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600"><MousePointerClick className="h-5 w-5" /></div>
+              <div className="rounded-xl bg-success-400/10 p-2.5 text-success-400"><MousePointerClick className="h-5 w-5" /></div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي النقرات</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalClicks)}</p>
+                <p className="text-sm text-text-muted">إجمالي النقرات</p>
+                <p className="mt-1 text-2xl font-bold text-text-primary">{formatNumber(showStats.totalClicks)}</p>
               </div>
             </div>
           </CardContent>
@@ -220,10 +220,10 @@ export default function AnalyticsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-purple-100 p-2.5 text-purple-600"><TrendingUp className="h-5 w-5" /></div>
+              <div className="rounded-xl bg-purple-500/15 p-2.5 text-purple-400"><TrendingUp className="h-5 w-5" /></div>
               <div>
-                <p className="text-sm text-slate-500">متوسط CTR</p>
-                <p className={cn("mt-1 text-2xl font-bold", showCtr >= 1 ? "text-emerald-600" : "text-amber-600")}>
+                <p className="text-sm text-text-muted">متوسط CTR</p>
+                <p className={cn("mt-1 text-2xl font-bold", showCtr >= 1 ? "text-success-400" : "text-amber-400")}>
                   {showCtr}%
                 </p>
               </div>
@@ -233,10 +233,10 @@ export default function AnalyticsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-red-100 p-2.5 text-red-600"><DollarSign className="h-5 w-5" /></div>
+              <div className="rounded-xl bg-error-400/10 p-2.5 text-error-400"><DollarSign className="h-5 w-5" /></div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي الإنفاق</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">{formatCurrency(showStats.totalSpend)}</p>
+                <p className="text-sm text-text-muted">إجمالي الإنفاق</p>
+                <p className="mt-1 text-2xl font-bold text-text-primary">{formatCurrency(showStats.totalSpend)}</p>
               </div>
             </div>
           </CardContent>
@@ -245,10 +245,10 @@ export default function AnalyticsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-amber-100 p-2.5 text-amber-600"><Users className="h-5 w-5" /></div>
+                <div className="rounded-xl bg-amber-300/15 p-2.5 text-amber-400"><Users className="h-5 w-5" /></div>
                 <div>
-                  <p className="text-sm text-slate-500">إجمالي المتابعين</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalFollowers)}</p>
+                  <p className="text-sm text-text-muted">إجمالي المتابعين</p>
+                  <p className="mt-1 text-2xl font-bold text-text-primary">{formatNumber(showStats.totalFollowers)}</p>
                 </div>
               </div>
             </CardContent>
@@ -257,12 +257,12 @@ export default function AnalyticsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-indigo-100 p-2.5 text-indigo-600"><Megaphone className="h-5 w-5" /></div>
+              <div className="rounded-xl bg-indigo-500/15 p-2.5 text-indigo-400"><Megaphone className="h-5 w-5" /></div>
               <div>
-                <p className="text-sm text-slate-500">الحملات</p>
-                <p className="mt-1 text-2xl font-bold text-slate-900">
+                <p className="text-sm text-text-muted">الحملات</p>
+                <p className="mt-1 text-2xl font-bold text-text-primary">
                   {showStats.activeCampaigns}
-                  <span className="text-base font-normal text-slate-400"> / {showStats.totalCampaigns}</span>
+                  <span className="text-base font-normal text-text-muted"> / {showStats.totalCampaigns}</span>
                 </p>
               </div>
             </div>
@@ -272,10 +272,10 @@ export default function AnalyticsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600"><TrendingUp className="h-5 w-5" /></div>
+                <div className="rounded-xl bg-success-400/10 p-2.5 text-success-400"><TrendingUp className="h-5 w-5" /></div>
                 <div>
-                  <p className="text-sm text-slate-500">التحويلات</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(showStats.totalConversions)}</p>
+                  <p className="text-sm text-text-muted">التحويلات</p>
+                  <p className="mt-1 text-2xl font-bold text-text-primary">{formatNumber(showStats.totalConversions)}</p>
                 </div>
               </div>
             </CardContent>
@@ -289,14 +289,14 @@ export default function AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary-600" />
+                <BarChart3 className="h-5 w-5 text-amber-300" />
                 أفضل حملات Meta
               </CardTitle>
             </CardHeader>
             <CardContent>
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-slate-100 text-sm text-slate-500">
+                  <tr className="border-b border-border-subtle text-sm text-text-muted">
                     <th className="pb-3 text-right font-medium">الحملة</th>
                     <th className="pb-3 text-right font-medium">الوصول</th>
                     <th className="pb-3 text-right font-medium">النقرات</th>
@@ -306,11 +306,11 @@ export default function AnalyticsPage() {
                 </thead>
                 <tbody>
                   {topCampaigns.map((c: any) => (
-                    <tr key={c.id} className="border-b border-slate-50 text-sm">
-                      <td className="py-3 font-semibold text-slate-900 max-w-[200px] truncate">{c.name}</td>
-                      <td className="py-3 text-slate-600">{formatNumber(c.metrics.reach)}</td>
-                      <td className="py-3 text-slate-600">{formatNumber(c.metrics.clicks)}</td>
-                      <td className="py-3 text-slate-600">${Number(c.metrics.spend).toFixed(2)}</td>
+                    <tr key={c.id} className="border-b border-border-subtle text-sm">
+                      <td className="py-3 font-semibold text-text-primary max-w-[200px] truncate">{c.name}</td>
+                      <td className="py-3 text-text-secondary">{formatNumber(c.metrics.reach)}</td>
+                      <td className="py-3 text-text-secondary">{formatNumber(c.metrics.clicks)}</td>
+                      <td className="py-3 text-text-secondary">${Number(c.metrics.spend).toFixed(2)}</td>
                       <td className="py-3">
                         <Badge
                           variant={
@@ -336,42 +336,42 @@ export default function AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary-600" />
+                <Globe className="h-5 w-5 text-amber-300" />
                 حسابات Google Ads
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {googleAccounts.length > 0 ? (
                 googleAccounts.map((account: any) => (
-                  <div key={account.id} className="flex items-center justify-between rounded-xl border border-slate-100 p-4">
+                  <div key={account.id} className="flex items-center justify-between rounded-xl border border-border-subtle p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 text-sm font-bold text-blue-400">
                         G
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-slate-700">{account.name}</span>
-                        <p className="text-xs text-slate-400">{account.currency}</p>
+                        <span className="text-sm font-semibold text-text-secondary">{account.name}</span>
+                        <p className="text-xs text-text-muted">{account.currency}</p>
                       </div>
                     </div>
                     <Badge variant="success">متصل</Badge>
                   </div>
                 ))
               ) : (
-                <p className="py-8 text-center text-sm text-slate-400">لا توجد حسابات</p>
+                <p className="py-8 text-center text-sm text-text-muted">لا توجد حسابات</p>
               )}
-              <div className="mt-4 rounded-xl bg-slate-50 p-4">
+              <div className="mt-4 rounded-xl bg-surface-hover p-4">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-xs text-slate-500">الحملات</p>
-                    <p className="text-lg font-bold text-slate-900">{gStats.totalCampaigns || 0}</p>
+                    <p className="text-xs text-text-muted">الحملات</p>
+                    <p className="text-lg font-bold text-text-primary">{gStats.totalCampaigns || 0}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">الإنفاق</p>
-                    <p className="text-lg font-bold text-slate-900">{formatCurrency(gStats.totalCost || 0)}</p>
+                    <p className="text-xs text-text-muted">الإنفاق</p>
+                    <p className="text-lg font-bold text-text-primary">{formatCurrency(gStats.totalCost || 0)}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">التحويلات</p>
-                    <p className="text-lg font-bold text-slate-900">{formatNumber(gStats.totalConversions || 0)}</p>
+                    <p className="text-xs text-text-muted">التحويلات</p>
+                    <p className="text-lg font-bold text-text-primary">{formatNumber(gStats.totalConversions || 0)}</p>
                   </div>
                 </div>
               </div>
@@ -384,7 +384,7 @@ export default function AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5 text-primary-600" />
+                <Globe className="h-5 w-5 text-amber-300" />
                 أداء الصفحات
               </CardTitle>
             </CardHeader>
@@ -401,23 +401,23 @@ export default function AnalyticsPage() {
                         {page.picture ? (
                           <img src={page.picture} alt="" className="h-8 w-8 rounded-full object-cover" />
                         ) : (
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 text-sm font-bold text-blue-400">
                             {page.name.charAt(0)}
                           </div>
                         )}
                         <div>
-                          <span className="text-sm font-semibold text-slate-700">{page.name}</span>
+                          <span className="text-sm font-semibold text-text-secondary">{page.name}</span>
                           {page.igUsername && (
-                            <span className="mr-2 text-xs text-slate-400">• IG: @{page.igUsername}</span>
+                            <span className="mr-2 text-xs text-text-muted">• IG: @{page.igUsername}</span>
                           )}
                         </div>
                       </div>
                       <div className="text-left text-sm">
-                        <span className="font-bold text-slate-700">{formatNumber(pageTotal)}</span>
-                        <span className="text-slate-400 mr-1">متابع</span>
+                        <span className="font-bold text-text-secondary">{formatNumber(pageTotal)}</span>
+                        <span className="text-text-muted mr-1">متابع</span>
                       </div>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-100">
+                    <div className="h-2 w-full rounded-full bg-surface-hover">
                       <div
                         className="h-2 rounded-full bg-blue-500 transition-all duration-500"
                         style={{ width: `${pct}%` }}

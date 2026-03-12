@@ -263,8 +263,8 @@ export default function ContentPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">إدارة المحتوى</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">إدارة المحتوى</h1>
+          <p className="mt-1 text-text-muted">
             {(summary?.total || 0) + scheduled.length} عنصر •
             {summary ? ` FB: ${summary.facebook} • IG: ${summary.instagram}` : ""} •
             {scheduled.length} مجدول
@@ -292,29 +292,29 @@ export default function ContentPage() {
           <Card className="text-center">
             <CardContent className="pt-6">
               <Heart className="mx-auto h-5 w-5 text-red-400" />
-              <p className="mt-2 text-2xl font-bold text-slate-900">{formatNumber(summary.totalLikes)}</p>
-              <p className="text-xs text-slate-500">إعجاب</p>
+              <p className="mt-2 text-2xl font-bold text-text-primary">{formatNumber(summary.totalLikes)}</p>
+              <p className="text-xs text-text-muted">إعجاب</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
               <MessageCircle className="mx-auto h-5 w-5 text-blue-400" />
-              <p className="mt-2 text-2xl font-bold text-slate-900">{formatNumber(summary.totalComments)}</p>
-              <p className="text-xs text-slate-500">تعليق</p>
+              <p className="mt-2 text-2xl font-bold text-text-primary">{formatNumber(summary.totalComments)}</p>
+              <p className="text-xs text-text-muted">تعليق</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
               <Share2 className="mx-auto h-5 w-5 text-emerald-400" />
-              <p className="mt-2 text-2xl font-bold text-slate-900">{formatNumber(summary.totalShares)}</p>
-              <p className="text-xs text-slate-500">مشاركة</p>
+              <p className="mt-2 text-2xl font-bold text-text-primary">{formatNumber(summary.totalShares)}</p>
+              <p className="text-xs text-text-muted">مشاركة</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
               <Eye className="mx-auto h-5 w-5 text-purple-400" />
-              <p className="mt-2 text-2xl font-bold text-slate-900">{formatNumber(summary.totalImpressions)}</p>
-              <p className="text-xs text-slate-500">ظهور</p>
+              <p className="mt-2 text-2xl font-bold text-text-primary">{formatNumber(summary.totalImpressions)}</p>
+              <p className="text-xs text-text-muted">ظهور</p>
             </CardContent>
           </Card>
         </div>
@@ -341,7 +341,7 @@ export default function ContentPage() {
       {/* Scheduled Content */}
       {(filter === "all" || filter === "scheduled") && scheduled.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-lg font-bold text-slate-900">
+          <h2 className="text-lg font-bold text-text-primary">
             <Clock className="inline h-5 w-5 ml-2 text-blue-500" />
             المحتوى المجدول ({scheduled.length})
           </h2>
@@ -351,18 +351,18 @@ export default function ContentPage() {
                 <span className="text-2xl">{platformEmoji[item.platform] || "📱"}</span>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-slate-700">
+                    <span className="font-semibold text-text-secondary">
                       {item.companies?.name || ""}
                     </span>
-                    <span className="text-slate-400">•</span>
-                    <span className="text-slate-400">
+                    <span className="text-text-muted">•</span>
+                    <span className="text-text-muted">
                       {item.scheduled_date} {item.scheduled_time}
                     </span>
                     {item.ai_generated && (
                       <Badge variant="purple" className="text-[10px] px-1.5 py-0.5">AI</Badge>
                     )}
                   </div>
-                  <p className="mt-2 text-sm text-slate-600 leading-relaxed line-clamp-2">
+                  <p className="mt-2 text-sm text-text-secondary leading-relaxed line-clamp-2">
                     {item.text_content}
                   </p>
                   {item.hashtags?.length > 0 && (
@@ -393,37 +393,37 @@ export default function ContentPage() {
         <>
           {!connected && posts.length === 0 ? (
             <Card className="flex flex-col items-center gap-3 p-12 text-center">
-              <WifiOff className="h-10 w-10 text-slate-300" />
-              <h3 className="text-lg font-bold text-slate-600">لا توجد منصات متصلة</h3>
-              <p className="text-sm text-slate-400">لعرض المنشورات المنشورة، اربط المنصات من الإعدادات</p>
+              <WifiOff className="h-10 w-10 text-text-muted" />
+              <h3 className="text-lg font-bold text-text-secondary">لا توجد منصات متصلة</h3>
+              <p className="text-sm text-text-muted">لعرض المنشورات المنشورة، اربط المنصات من الإعدادات</p>
             </Card>
           ) : filteredPosts.length > 0 && (
             <div className="space-y-3">
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-text-primary">
                 <Send className="inline h-5 w-5 ml-2 text-emerald-500" />
                 المنشور ({filteredPosts.length})
               </h2>
               {filteredPosts.map((post) => (
                 <Card key={post.id} className="overflow-hidden">
                   <div className="flex">
-                    <div className="flex w-16 flex-col items-center justify-center border-l border-slate-100 bg-slate-50 p-4 text-center">
+                    <div className="flex w-16 flex-col items-center justify-center border-l border-border-subtle bg-surface-hover p-4 text-center">
                       <span className="text-2xl">{platformEmoji[post.platform]}</span>
                       {post.mediaType && (
-                        post.mediaType === "video" ? <Video className="mt-2 h-4 w-4 text-slate-400" /> :
-                        post.mediaType === "carousel_album" ? <FileImage className="mt-2 h-4 w-4 text-slate-400" /> :
-                        <Image className="mt-2 h-4 w-4 text-slate-400" />
+                        post.mediaType === "video" ? <Video className="mt-2 h-4 w-4 text-text-muted" /> :
+                        post.mediaType === "carousel_album" ? <FileImage className="mt-2 h-4 w-4 text-text-muted" /> :
+                        <Image className="mt-2 h-4 w-4 text-text-muted" />
                       )}
                     </div>
                     <div className="flex-1 p-5">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-slate-700">{post.pageName}</span>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-sm font-semibold text-text-secondary">{post.pageName}</span>
+                            <span className="text-xs text-text-muted">
                               {new Date(post.createdAt).toLocaleDateString("ar-SA", { year: "numeric", month: "short", day: "numeric" })}
                             </span>
                           </div>
-                          <p className="mt-2 text-sm text-slate-600 leading-relaxed line-clamp-3">
+                          <p className="mt-2 text-sm text-text-secondary leading-relaxed line-clamp-3">
                             {post.message || "(بدون نص)"}
                           </p>
                         </div>
@@ -431,20 +431,20 @@ export default function ContentPage() {
                           <img src={post.image} alt="" className="mr-4 h-20 w-20 rounded-lg object-cover" />
                         )}
                       </div>
-                      <div className="mt-4 flex items-center gap-4 border-t border-slate-100 pt-4">
-                        <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                      <div className="mt-4 flex items-center gap-4 border-t border-border-subtle pt-4">
+                        <span className="flex items-center gap-1.5 text-sm text-text-muted">
                           <Heart className="h-3.5 w-3.5 text-red-400" />{formatNumber(post.metrics.likes)}
                         </span>
-                        <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                        <span className="flex items-center gap-1.5 text-sm text-text-muted">
                           <MessageCircle className="h-3.5 w-3.5 text-blue-400" />{formatNumber(post.metrics.comments)}
                         </span>
                         {post.metrics.shares > 0 && (
-                          <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                          <span className="flex items-center gap-1.5 text-sm text-text-muted">
                             <Share2 className="h-3.5 w-3.5 text-emerald-400" />{formatNumber(post.metrics.shares)}
                           </span>
                         )}
                         {post.url && (
-                          <a href={post.url} target="_blank" rel="noopener noreferrer" className="mr-auto flex items-center gap-1 text-xs text-primary-600 hover:underline">
+                          <a href={post.url} target="_blank" rel="noopener noreferrer" className="mr-auto flex items-center gap-1 text-xs text-amber-300 hover:underline">
                             <ExternalLink className="h-3 w-3" />عرض
                           </a>
                         )}
@@ -567,7 +567,7 @@ export default function ContentPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              <Sparkles className="inline h-5 w-5 text-primary-600 ml-2" />
+              <Sparkles className="inline h-5 w-5 text-amber-300 ml-2" />
               توليد محتوى بالذكاء الاصطناعي
             </DialogTitle>
             <DialogDescription>استخدم الذكاء الاصطناعي لتوليد محتوى جاهز للنشر</DialogDescription>

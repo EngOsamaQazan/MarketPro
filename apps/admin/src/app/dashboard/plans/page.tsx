@@ -259,8 +259,8 @@ export default function PlansPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">خطط التسويق</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">خطط التسويق</h1>
+          <p className="mt-1 text-text-muted">
             {plans.length} خطة • {plans.filter((p) => p.status === "in_progress").length} قيد التنفيذ
           </p>
         </div>
@@ -278,9 +278,9 @@ export default function PlansPage() {
 
       {plans.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 p-12 text-center">
-          <FileText className="h-10 w-10 text-slate-300" />
-          <h3 className="text-lg font-bold text-slate-600">لا توجد خطط بعد</h3>
-          <p className="text-sm text-slate-400">
+          <FileText className="h-10 w-10 text-text-muted" />
+          <h3 className="text-lg font-bold text-text-secondary">لا توجد خطط بعد</h3>
+          <p className="text-sm text-text-muted">
             ابدأ بإنشاء خطة تسويقية شهرية باستخدام الذكاء الاصطناعي
           </p>
           <Button onClick={() => setShowModal(true)} className="mt-2">
@@ -295,12 +295,12 @@ export default function PlansPage() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100">
-                      <FileText className="h-6 w-6 text-primary-600" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-300/10">
+                      <FileText className="h-6 w-6 text-amber-300" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">{plan.title}</h3>
-                      <div className="mt-1 flex items-center gap-3 text-sm text-slate-500">
+                      <h3 className="text-lg font-bold text-text-primary">{plan.title}</h3>
+                      <div className="mt-1 flex items-center gap-3 text-sm text-text-muted">
                         <span>{plan.companies?.name}</span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
@@ -321,7 +321,7 @@ export default function PlansPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => updateStatus(plan.id, "approved")}
-                        className="border-emerald-200 bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                        className="bg-success-400/10 text-success-400 hover:bg-success-400/20"
                       >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         اعتماد
@@ -332,7 +332,7 @@ export default function PlansPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => updateStatus(plan.id, "in_progress")}
-                        className="border-indigo-200 bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                        className="bg-indigo-500/15 text-indigo-400 hover:bg-indigo-500/25"
                       >
                         بدء التنفيذ
                       </Button>
@@ -359,7 +359,7 @@ export default function PlansPage() {
                 {plan.target_platforms && plan.target_platforms.length > 0 && (
                   <div className="mt-4 flex gap-1.5">
                     {plan.target_platforms.map((p) => (
-                      <span key={p} className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-sm">
+                      <span key={p} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-hover text-sm">
                         {platformEmoji[p] || "📊"}
                       </span>
                     ))}
@@ -368,11 +368,11 @@ export default function PlansPage() {
 
                 {plan.objectives && plan.objectives.length > 0 && (
                   <div className="mt-4">
-                    <h4 className="text-sm font-semibold text-slate-700">الأهداف:</h4>
+                    <h4 className="text-sm font-semibold text-text-secondary">الأهداف:</h4>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {plan.objectives.map((obj, i) => (
-                        <span key={i} className="flex items-center gap-1.5 rounded-lg bg-slate-50 px-3 py-1.5 text-xs text-slate-600">
-                          <Target className="h-3 w-3 text-primary-500" />
+                        <span key={i} className="flex items-center gap-1.5 rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary">
+                          <Target className="h-3 w-3 text-amber-300" />
                           {obj}
                         </span>
                       ))}
@@ -381,15 +381,15 @@ export default function PlansPage() {
                 )}
 
                 {plan.kpis && Object.keys(plan.kpis).length > 0 && (
-                  <div className="mt-5 border-t border-slate-100 pt-5">
-                    <h4 className="text-sm font-semibold text-slate-700 mb-3">مؤشرات الأداء:</h4>
+                  <div className="mt-5 border-t border-border-subtle pt-5">
+                    <h4 className="text-sm font-semibold text-text-secondary mb-3">مؤشرات الأداء:</h4>
                     <div className="grid grid-cols-3 gap-4">
                       {Object.entries(plan.kpis).slice(0, 6).map(([key, kpi]) => (
-                        <div key={key} className="rounded-xl bg-slate-50 p-3">
-                          <span className="text-xs text-slate-500">
+                        <div key={key} className="rounded-xl bg-surface-hover p-3">
+                          <span className="text-xs text-text-muted">
                             {key.replace(/_/g, " ")}
                           </span>
-                          <p className="mt-1 text-sm font-bold text-slate-700">
+                          <p className="mt-1 text-sm font-bold text-text-secondary">
                             {typeof kpi === "object" && kpi !== null && "target" in kpi
                               ? `${(kpi as any).target?.toLocaleString("ar-SA")} ${(kpi as any).unit || ""}`
                               : String(kpi)}
@@ -410,7 +410,7 @@ export default function PlansPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              <Sparkles className="inline h-5 w-5 text-primary-600 ml-2" />
+              <Sparkles className="inline h-5 w-5 text-amber-300 ml-2" />
               إنشاء خطة بالذكاء الاصطناعي
             </DialogTitle>
             <DialogDescription>

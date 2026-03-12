@@ -96,11 +96,11 @@ export default function AutomationPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
-            <Bot className="inline h-7 w-7 ml-2 text-primary-600" />
+          <h1 className="text-2xl font-bold text-text-primary">
+            <Bot className="inline h-7 w-7 ml-2 text-amber-300" />
             مركز الأتمتة
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-text-muted">
             المهام التلقائية وسجل الذكاء الاصطناعي
           </p>
         </div>
@@ -116,10 +116,10 @@ export default function AutomationPage() {
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-slate-500">إجمالي العمليات</p>
-                <p className="mt-2 text-3xl font-bold text-slate-900">{activities.length}</p>
+                <p className="text-sm text-text-muted">إجمالي العمليات</p>
+                <p className="mt-2 text-3xl font-bold text-text-primary">{activities.length}</p>
               </div>
-              <div className="rounded-xl bg-purple-100 p-3 text-purple-600">
+              <div className="rounded-xl bg-purple-500/15 p-3 text-purple-400">
                 <Sparkles className="h-5 w-5" />
               </div>
             </div>
@@ -129,10 +129,10 @@ export default function AutomationPage() {
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-slate-500">Tokens مستخدمة</p>
-                <p className="mt-2 text-3xl font-bold text-slate-900">{formatNumber(totalTokens)}</p>
+                <p className="text-sm text-text-muted">Tokens مستخدمة</p>
+                <p className="mt-2 text-3xl font-bold text-text-primary">{formatNumber(totalTokens)}</p>
               </div>
-              <div className="rounded-xl bg-blue-100 p-3 text-blue-600">
+              <div className="rounded-xl bg-blue-500/15 p-3 text-blue-400">
                 <Zap className="h-5 w-5" />
               </div>
             </div>
@@ -142,10 +142,10 @@ export default function AutomationPage() {
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-slate-500">التكلفة التقديرية</p>
-                <p className="mt-2 text-3xl font-bold text-slate-900">${totalCost.toFixed(4)}</p>
+                <p className="text-sm text-text-muted">التكلفة التقديرية</p>
+                <p className="mt-2 text-3xl font-bold text-text-primary">${totalCost.toFixed(4)}</p>
               </div>
-              <div className="rounded-xl bg-emerald-100 p-3 text-emerald-600">
+              <div className="rounded-xl bg-success-400/10 p-3 text-success-400">
                 <DollarSign className="h-5 w-5" />
               </div>
             </div>
@@ -155,10 +155,10 @@ export default function AutomationPage() {
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-slate-500">المهام المجدولة</p>
-                <p className="mt-2 text-3xl font-bold text-slate-900">{CRON_JOBS.length}</p>
+                <p className="text-sm text-text-muted">المهام المجدولة</p>
+                <p className="mt-2 text-3xl font-bold text-text-primary">{CRON_JOBS.length}</p>
               </div>
-              <div className="rounded-xl bg-amber-100 p-3 text-amber-600">
+              <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
                 <Calendar className="h-5 w-5" />
               </div>
             </div>
@@ -176,16 +176,16 @@ export default function AutomationPage() {
           <CardContent>
             <div className="space-y-3">
               {CRON_JOBS.map((job) => (
-                <div key={job.id} className="rounded-xl border border-slate-100 p-4">
+                <div key={job.id} className="rounded-xl border border-border-subtle p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-slate-700">{job.name}</span>
+                    <span className="text-sm font-semibold text-text-secondary">{job.name}</span>
                     <Badge variant="success" className="text-[10px]">
                       <CheckCircle2 className="h-3 w-3 ml-1" />
                       مفعّل
                     </Badge>
                   </div>
-                  <p className="text-xs text-slate-500">{job.description}</p>
-                  <div className="mt-2 flex items-center gap-1 text-[11px] text-slate-400">
+                  <p className="text-xs text-text-muted">{job.description}</p>
+                  <div className="mt-2 flex items-center gap-1 text-[11px] text-text-muted">
                     <Clock className="h-3 w-3" />
                     {job.schedule}
                   </div>
@@ -205,22 +205,22 @@ export default function AutomationPage() {
             {activities.length > 0 ? (
               <div className="space-y-3">
                 {activities.slice(0, 20).map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-slate-100 p-4">
-                    <div className="rounded-lg bg-purple-100 p-2.5 text-purple-600">
+                  <div key={activity.id} className="flex items-start gap-4 rounded-xl border border-border-subtle p-4">
+                    <div className="rounded-lg bg-purple-500/15 p-2.5 text-purple-400">
                       <Activity className="h-4 w-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-slate-700">
+                        <p className="text-sm font-semibold text-text-secondary">
                           {ACTION_LABELS[activity.action_type] || activity.action_type}
                         </p>
-                        <span className="text-[11px] text-slate-400">
+                        <span className="text-[11px] text-text-muted">
                           {new Date(activity.created_at).toLocaleDateString("ar-SA", {
                             month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
                           })}
                         </span>
                       </div>
-                      <div className="mt-1 flex items-center gap-3 text-xs text-slate-500">
+                      <div className="mt-1 flex items-center gap-3 text-xs text-text-muted">
                         {activity.tokens_used > 0 && (
                           <span className="flex items-center gap-1">
                             <Zap className="h-3 w-3" />
@@ -240,9 +240,9 @@ export default function AutomationPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center gap-3 py-12 text-center">
-                <Bot className="h-10 w-10 text-slate-300" />
-                <p className="text-sm text-slate-400">لم يتم تسجيل أي نشاط بعد</p>
-                <p className="text-xs text-slate-400">ستظهر هنا عمليات الذكاء الاصطناعي والمهام الآلية</p>
+                <Bot className="h-10 w-10 text-text-muted" />
+                <p className="text-sm text-text-muted">لم يتم تسجيل أي نشاط بعد</p>
+                <p className="text-xs text-text-muted">ستظهر هنا عمليات الذكاء الاصطناعي والمهام الآلية</p>
               </div>
             )}
           </CardContent>

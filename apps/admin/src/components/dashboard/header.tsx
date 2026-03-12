@@ -180,27 +180,26 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-100 bg-white/80 px-8 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border-subtle bg-surface-base/80 px-8 backdrop-blur-xl">
       <div className="flex items-center gap-4">
-        {/* Client Selector */}
         <Popover open={showClientSelector} onOpenChange={setShowClientSelector}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="gap-2 min-w-[180px] justify-between">
               <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-slate-500" />
+                <Building2 className="h-4 w-4 text-text-muted" />
                 <span className="truncate max-w-[140px]">
                   {selectedClient?.name || "كل العملاء"}
                 </span>
               </div>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
+              <ChevronDown className="h-4 w-4 text-text-muted" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-72 p-0" align="start">
-            <div className="p-3 border-b border-slate-100">
-              <p className="text-xs font-medium text-slate-500 mb-1">
+            <div className="p-3 border-b border-border-subtle">
+              <p className="text-xs font-medium text-text-muted mb-1">
                 {org?.name || "المنظمة"}
               </p>
-              <p className="text-sm font-semibold text-slate-900">اختر عميلاً</p>
+              <p className="text-sm font-semibold text-text-primary">اختر عميلاً</p>
             </div>
             <ScrollArea className="max-h-64">
               <button
@@ -209,8 +208,8 @@ export function Header() {
                   setShowClientSelector(false);
                 }}
                 className={cn(
-                  "flex w-full items-center gap-3 px-4 py-2.5 text-right hover:bg-slate-50 transition-colors",
-                  !selectedClientId && "bg-primary-50 text-primary-700"
+                  "flex w-full items-center gap-3 px-4 py-2.5 text-right hover:bg-surface-hover transition-colors",
+                  !selectedClientId && "bg-amber-300/10 text-amber-300"
                 )}
               >
                 <Building2 className="h-4 w-4" />
@@ -225,20 +224,20 @@ export function Header() {
                     setShowClientSelector(false);
                   }}
                   className={cn(
-                    "flex w-full items-center gap-3 px-4 py-2.5 text-right hover:bg-slate-50 transition-colors",
-                    selectedClientId === client.id && "bg-primary-50 text-primary-700"
+                    "flex w-full items-center gap-3 px-4 py-2.5 text-right hover:bg-surface-hover transition-colors",
+                    selectedClientId === client.id && "bg-amber-300/10 text-amber-300"
                   )}
                 >
                   {client.logo_url ? (
                     <img src={client.logo_url} alt="" className="h-6 w-6 rounded-full object-cover" />
                   ) : (
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-600">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-elevated text-[10px] font-bold text-text-secondary">
                       {client.name.charAt(0)}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{client.name}</p>
-                    <p className="text-[10px] text-slate-400">{client.industry}</p>
+                    <p className="text-[10px] text-text-muted">{client.industry}</p>
                   </div>
                   <Badge variant={STATUS_BADGE_VARIANT[client.status] || "secondary"} className="text-[10px]">
                     {getStatusLabel(client.status)}
@@ -246,44 +245,43 @@ export function Header() {
                 </button>
               ))}
               {clients.length === 0 && (
-                <p className="py-6 text-center text-sm text-slate-400">لا يوجد عملاء</p>
+                <p className="py-6 text-center text-sm text-text-muted">لا يوجد عملاء</p>
               )}
             </ScrollArea>
           </PopoverContent>
         </Popover>
 
-        {/* Search */}
         <div className="relative" ref={searchRef}>
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <Input
             type="search"
             placeholder="بحث عن عميل، حملة، محتوى..."
             value={searchQuery}
             onChange={(e) => onSearchInput(e.target.value)}
             onFocus={() => searchQuery.length >= 2 && setShowSearch(true)}
-            className="w-72 bg-slate-50 pe-4 ps-10"
+            className="w-72 pe-4 ps-10"
             autoComplete="off"
           />
 
           {showSearch && (
-            <div className="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl z-50">
+            <div className="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-auto rounded-xl border border-border-default bg-surface-card shadow-xl z-50">
               {searching ? (
                 <div className="flex items-center justify-center py-6">
-                  <Loader2 className="h-5 w-5 animate-spin text-primary-600" />
+                  <Loader2 className="h-5 w-5 animate-spin text-amber-300" />
                 </div>
               ) : searchResults.length > 0 ? (
                 searchResults.map((result) => (
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => onResultClick(result)}
-                    className="flex w-full items-center gap-3 border-b border-slate-50 px-4 py-3 text-right hover:bg-slate-50 transition-colors"
+                    className="flex w-full items-center gap-3 border-b border-border-subtle px-4 py-3 text-right hover:bg-surface-hover transition-colors"
                   >
                     <span className="text-lg">
                       {result.type === "client" ? "🏢" : result.type === "plan" ? "📋" : result.type === "campaign" ? "📣" : "📝"}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
-                      <p className="text-xs text-slate-400 truncate">{result.subtitle}</p>
+                      <p className="text-sm font-semibold text-text-primary truncate">{result.title}</p>
+                      <p className="text-xs text-text-muted truncate">{result.subtitle}</p>
                     </div>
                     {result.status && (
                       <Badge variant={STATUS_BADGE_VARIANT[result.status] || "secondary"}>
@@ -293,7 +291,7 @@ export function Header() {
                   </button>
                 ))
               ) : (
-                <p className="py-6 text-center text-sm text-slate-400">لا توجد نتائج</p>
+                <p className="py-6 text-center text-sm text-text-muted">لا توجد نتائج</p>
               )}
             </div>
           )}
@@ -301,7 +299,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Button onClick={() => router.push("/clients")}>
+        <Button onClick={() => router.push("/dashboard/clients")}>
           <Plus className="h-4 w-4" />
           إضافة عميل
         </Button>
@@ -317,7 +315,7 @@ export function Header() {
             <Button variant="outline" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
-                <span className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                <span className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-500 text-[10px] font-bold text-white">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
@@ -325,9 +323,9 @@ export function Header() {
           </PopoverTrigger>
           <PopoverContent className="w-96 p-0" align="start">
             <div className="flex items-center justify-between px-4 py-3">
-              <h3 className="font-bold text-slate-900">الإشعارات</h3>
+              <h3 className="font-bold text-text-primary">الإشعارات</h3>
               {unreadCount > 0 && (
-                <button onClick={markAllRead} className="text-xs text-primary-600 hover:underline flex items-center gap-1">
+                <button onClick={markAllRead} className="text-xs text-amber-300 hover:underline flex items-center gap-1">
                   <Check className="h-3 w-3" />
                   قراءة الكل
                 </button>
@@ -335,7 +333,7 @@ export function Header() {
             </div>
             <Separator />
             {notifications.length === 0 ? (
-              <p className="py-8 text-center text-sm text-slate-400">لا توجد إشعارات</p>
+              <p className="py-8 text-center text-sm text-text-muted">لا توجد إشعارات</p>
             ) : (
               <ScrollArea className="max-h-80">
                 {notifications.slice(0, 20).map((n) => (
@@ -346,21 +344,21 @@ export function Header() {
                       setShowNotifications(false);
                     }}
                     className={cn(
-                      "flex w-full items-start gap-3 border-b border-slate-50 px-4 py-3 text-right hover:bg-slate-50 transition-colors",
-                      !n.is_read && "bg-blue-50/50"
+                      "flex w-full items-start gap-3 border-b border-border-subtle px-4 py-3 text-right hover:bg-surface-hover transition-colors",
+                      !n.is_read && "bg-amber-300/5"
                     )}
                   >
                     <span className="mt-0.5 text-lg">{TYPE_ICONS[n.type] || "🔔"}</span>
                     <div className="flex-1 min-w-0">
-                      <p className={cn("text-sm truncate", !n.is_read ? "font-bold text-slate-900" : "font-medium text-slate-700")}>
+                      <p className={cn("text-sm truncate", !n.is_read ? "font-bold text-text-primary" : "font-medium text-text-secondary")}>
                         {n.title}
                       </p>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{n.body}</p>
-                      <p className="text-[10px] text-slate-400 mt-1">
+                      <p className="text-xs text-text-muted mt-0.5 line-clamp-2">{n.body}</p>
+                      <p className="text-[10px] text-text-muted mt-1">
                         {new Date(n.created_at).toLocaleDateString("ar-SA", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
-                    {!n.is_read && <div className="mt-2 h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" />}
+                    {!n.is_read && <div className="mt-2 h-2 w-2 rounded-full bg-amber-300 flex-shrink-0" />}
                   </button>
                 ))}
               </ScrollArea>
@@ -370,23 +368,23 @@ export function Header() {
 
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-2 hover:bg-slate-50 transition-colors cursor-pointer">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-xs font-bold text-white">
+            <button className="flex items-center gap-3 rounded-xl border border-border-default px-3 py-2 hover:bg-surface-hover transition-colors cursor-pointer">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full gradient-amber text-xs font-bold text-text-inverse">
                 {user?.name?.charAt(0)?.toUpperCase() || "M"}
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-slate-900">{user?.name || "..."}</p>
-                <p className="text-[11px] text-slate-400">{user ? ROLE_LABELS[user.role] || user.role : "..."}</p>
+                <p className="text-sm font-semibold text-text-primary">{user?.name || "..."}</p>
+                <p className="text-[11px] text-text-muted">{user ? ROLE_LABELS[user.role] || user.role : "..."}</p>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+              <ChevronDown className="h-3.5 w-3.5 text-text-muted" />
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-56 p-2" align="start">
             <button
-              onClick={() => router.push("/settings")}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+              onClick={() => router.push("/dashboard/settings")}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-text-secondary hover:bg-surface-hover transition-colors"
             >
-              <Settings className="h-4 w-4 text-slate-400" />
+              <Settings className="h-4 w-4 text-text-muted" />
               الإعدادات
             </button>
             <Separator className="my-1" />
@@ -396,7 +394,7 @@ export function Header() {
                 router.push("/login");
                 router.refresh();
               }}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-error-400 hover:bg-error-400/10 transition-colors"
             >
               <LogOut className="h-4 w-4" />
               تسجيل الخروج

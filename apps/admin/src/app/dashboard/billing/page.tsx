@@ -76,27 +76,27 @@ const statusConfig: Record<
 > = {
   draft: {
     label: "مسودة",
-    color: "bg-slate-100 text-slate-700",
+    color: "bg-surface-elevated text-text-secondary",
     icon: FileText,
   },
   sent: {
     label: "مُرسلة",
-    color: "bg-blue-100 text-blue-700",
+    color: "bg-blue-500/15 text-blue-400",
     icon: Send,
   },
   paid: {
     label: "مدفوعة",
-    color: "bg-emerald-100 text-emerald-700",
+    color: "bg-success-400/10 text-success-400",
     icon: CheckCircle2,
   },
   overdue: {
     label: "متأخرة",
-    color: "bg-red-100 text-red-700",
+    color: "bg-error-400/10 text-error-400",
     icon: AlertTriangle,
   },
   cancelled: {
     label: "ملغاة",
-    color: "bg-gray-100 text-gray-500",
+    color: "bg-surface-hover text-text-muted",
     icon: X,
   },
 };
@@ -326,29 +326,29 @@ export default function BillingPage() {
       label: "إجمالي الإيرادات",
       value: formatCurrency(totalRevenue),
       icon: DollarSign,
-      color: "text-emerald-600",
-      bg: "bg-emerald-50",
+      color: "text-success-400",
+      bg: "bg-success-400/10",
     },
     {
       label: "مدفوعات معلقة",
       value: formatCurrency(pendingPayments),
       icon: Clock,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: "text-blue-400",
+      bg: "bg-blue-500/15",
     },
     {
       label: "مبالغ متأخرة",
       value: formatCurrency(overdueAmount),
       icon: AlertTriangle,
-      color: "text-red-600",
-      bg: "bg-red-50",
+      color: "text-error-400",
+      bg: "bg-error-400/10",
     },
     {
       label: "مسودات",
       value: formatCurrency(draftAmount),
       icon: FileText,
-      color: "text-slate-600",
-      bg: "bg-slate-50",
+      color: "text-text-secondary",
+      bg: "bg-surface-hover",
     },
   ];
 
@@ -357,11 +357,11 @@ export default function BillingPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-            <Receipt className="h-7 w-7 text-primary-600" />
+          <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
+            <Receipt className="h-7 w-7 text-amber-300" />
             الفوترة والمدفوعات
           </h1>
-          <p className="text-slate-500 mt-1">إدارة الفواتير والمدفوعات للعملاء</p>
+          <p className="text-text-muted mt-1">إدارة الفواتير والمدفوعات للعملاء</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" onClick={fetchInvoices}>
@@ -382,7 +382,7 @@ export default function BillingPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-500">{stat.label}</p>
+                  <p className="text-sm text-text-muted">{stat.label}</p>
                   <p className="text-2xl font-bold mt-1">{stat.value}</p>
                 </div>
                 <div className={cn("p-3 rounded-xl", stat.bg)}>
@@ -397,7 +397,7 @@ export default function BillingPage() {
       {/* Filters */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <Input
             placeholder="بحث في الفواتير..."
             value={search}
@@ -436,11 +436,11 @@ export default function BillingPage() {
       ) : filteredInvoices.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
-            <Receipt className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-600">
+            <Receipt className="h-12 w-12 text-text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-text-secondary">
               لا توجد فواتير
             </h3>
-            <p className="text-slate-400 mt-1">
+            <p className="text-text-muted mt-1">
               ابدأ بإنشاء فاتورة جديدة
             </p>
           </CardContent>
@@ -460,13 +460,13 @@ export default function BillingPage() {
                       <div
                         className={cn(
                           "p-2.5 rounded-xl",
-                          config.color.includes("emerald")
-                            ? "bg-emerald-50"
+                          config.color.includes("success")
+                            ? "bg-success-400/10"
                             : config.color.includes("blue")
-                              ? "bg-blue-50"
-                              : config.color.includes("red")
-                                ? "bg-red-50"
-                                : "bg-slate-50"
+                              ? "bg-blue-500/15"
+                              : config.color.includes("error")
+                                ? "bg-error-400/10"
+                                : "bg-surface-hover"
                         )}
                       >
                         <StatusIcon
@@ -478,7 +478,7 @@ export default function BillingPage() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
-                          <h3 className="font-semibold text-slate-900">
+                          <h3 className="font-semibold text-text-primary">
                             {invoice.companies?.name || "—"}
                           </h3>
                           <Badge
@@ -488,7 +488,7 @@ export default function BillingPage() {
                             {config.label}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-slate-500">
+                        <div className="flex items-center gap-4 mt-1 text-sm text-text-muted">
                           <span>شهر: {invoice.month}</span>
                           <span>•</span>
                           <span>
@@ -506,10 +506,10 @@ export default function BillingPage() {
 
                     <div className="flex items-center gap-4">
                       <div className="text-left">
-                        <p className="text-lg font-bold text-slate-900">
+                        <p className="text-lg font-bold text-text-primary">
                           {formatCurrency(invoice.amount)}
                         </p>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-xs text-text-muted">
                           {formatDate(invoice.created_at)}
                         </p>
                       </div>
@@ -536,7 +536,7 @@ export default function BillingPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                            className="text-success-400 border-border-default hover:bg-success-400/10"
                             onClick={() => updateStatus(invoice.id, "paid")}
                             disabled={isActionLoading}
                           >
@@ -555,7 +555,7 @@ export default function BillingPage() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                            className="text-error-400 hover:text-error-400 hover:bg-error-400/10"
                             onClick={() =>
                               updateStatus(invoice.id, "cancelled")
                             }
@@ -572,16 +572,16 @@ export default function BillingPage() {
                   {invoice.items &&
                     Array.isArray(invoice.items) &&
                     invoice.items.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-slate-100">
-                        <div className="grid grid-cols-3 gap-2 text-xs text-slate-500">
+                      <div className="mt-4 pt-4 border-t border-border-subtle">
+                        <div className="grid grid-cols-3 gap-2 text-xs text-text-muted">
                           {(invoice.items as InvoiceItem[]).map(
                             (item, idx) => (
                               <div
                                 key={idx}
-                                className="flex justify-between bg-slate-50 rounded-lg p-2"
+                                className="flex justify-between bg-surface-hover rounded-lg p-2"
                               >
                                 <span className="truncate">{item.description}</span>
-                                <span className="font-medium text-slate-700 mr-2">
+                                <span className="font-medium text-text-secondary mr-2">
                                   {formatCurrency(
                                     item.quantity * item.unit_price
                                   )}
@@ -696,7 +696,7 @@ export default function BillingPage() {
                   >
                     <div>
                       {idx === 0 && (
-                        <Label className="text-xs text-slate-500">الوصف</Label>
+                        <Label className="text-xs text-text-muted">الوصف</Label>
                       )}
                       <Input
                         value={item.description}
@@ -708,7 +708,7 @@ export default function BillingPage() {
                     </div>
                     <div>
                       {idx === 0 && (
-                        <Label className="text-xs text-slate-500">الكمية</Label>
+                        <Label className="text-xs text-text-muted">الكمية</Label>
                       )}
                       <Input
                         type="number"
@@ -725,7 +725,7 @@ export default function BillingPage() {
                     </div>
                     <div>
                       {idx === 0 && (
-                        <Label className="text-xs text-slate-500">
+                        <Label className="text-xs text-text-muted">
                           السعر ($)
                         </Label>
                       )}
@@ -749,7 +749,7 @@ export default function BillingPage() {
                       size="sm"
                       onClick={() => removeLineItem(idx)}
                       disabled={newInvoice.items.length === 1}
-                      className="text-red-400 hover:text-red-600 p-0 h-9"
+                      className="text-error-400 hover:text-error-400 p-0 h-9"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -757,11 +757,11 @@ export default function BillingPage() {
                 ))}
               </div>
 
-              <div className="flex justify-between items-center pt-3 border-t border-slate-200">
-                <span className="text-sm font-medium text-slate-600">
+              <div className="flex justify-between items-center pt-3 border-t border-border-subtle">
+                <span className="text-sm font-medium text-text-secondary">
                   الإجمالي
                 </span>
-                <span className="text-xl font-bold text-slate-900">
+                <span className="text-xl font-bold text-text-primary">
                   {formatCurrency(calculatedTotal)}
                 </span>
               </div>

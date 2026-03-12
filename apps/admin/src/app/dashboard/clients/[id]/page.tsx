@@ -87,12 +87,12 @@ interface ClientStats {
 }
 
 const PLATFORMS = [
-  { id: "meta", name: "Meta (Facebook + Instagram)", emoji: "📘", color: "bg-blue-100 text-blue-700" },
-  { id: "tiktok", name: "TikTok", emoji: "🎵", color: "bg-slate-100 text-slate-700" },
-  { id: "x", name: "X (Twitter)", emoji: "𝕏", color: "bg-slate-100 text-slate-700" },
-  { id: "linkedin", name: "LinkedIn", emoji: "💼", color: "bg-blue-100 text-blue-800" },
-  { id: "snapchat", name: "Snapchat", emoji: "👻", color: "bg-yellow-100 text-yellow-700" },
-  { id: "youtube", name: "YouTube", emoji: "▶️", color: "bg-red-100 text-red-700" },
+  { id: "meta", name: "Meta (Facebook + Instagram)", emoji: "📘", color: "bg-accent-400/15 text-accent-400" },
+  { id: "tiktok", name: "TikTok", emoji: "🎵", color: "bg-surface-elevated text-text-secondary" },
+  { id: "x", name: "X (Twitter)", emoji: "𝕏", color: "bg-surface-elevated text-text-secondary" },
+  { id: "linkedin", name: "LinkedIn", emoji: "💼", color: "bg-accent-400/15 text-accent-400" },
+  { id: "snapchat", name: "Snapchat", emoji: "👻", color: "bg-amber-300/15 text-amber-300" },
+  { id: "youtube", name: "YouTube", emoji: "▶️", color: "bg-error-400/15 text-error-400" },
 ];
 
 const statusVariant: Record<string, "success" | "warning" | "destructive" | "secondary"> = {
@@ -388,10 +388,10 @@ export default function ClientDetailPage() {
   if (!client) {
     return (
       <div className="flex flex-col items-center gap-4 py-20 text-center">
-        <Users className="h-12 w-12 text-slate-300" />
-        <h2 className="text-xl font-bold text-slate-600">العميل غير موجود</h2>
-        <p className="text-sm text-slate-400">لم يتم العثور على العميل المطلوب</p>
-        <Button variant="outline" onClick={() => router.push("/clients")}>
+        <Users className="h-12 w-12 text-text-muted" />
+        <h2 className="text-xl font-bold text-text-secondary">العميل غير موجود</h2>
+        <p className="text-sm text-text-muted">لم يتم العثور على العميل المطلوب</p>
+        <Button variant="outline" onClick={() => router.push("/dashboard/clients")}>
           <ArrowRight className="h-4 w-4" />
           العودة للعملاء
         </Button>
@@ -411,15 +411,15 @@ export default function ClientDetailPage() {
   ];
 
   const quickActions = [
-    { label: "إنشاء خطة", icon: Sparkles, href: `/plans?company_id=${id}` },
-    { label: "إنشاء محتوى", icon: CalendarDays, href: `/content?company_id=${id}` },
-    { label: "إنشاء تقرير", icon: FileText, href: `/reports?company_id=${id}` },
+    { label: "إنشاء خطة", icon: Sparkles, href: `/dashboard/plans?company_id=${id}` },
+    { label: "إنشاء محتوى", icon: CalendarDays, href: `/dashboard/content?company_id=${id}` },
+    { label: "إنشاء تقرير", icon: FileText, href: `/dashboard/reports?company_id=${id}` },
   ];
 
   return (
     <div className="space-y-8">
       {/* Back Button */}
-      <Button variant="ghost" size="sm" onClick={() => router.push("/clients")} className="gap-2 text-slate-500 hover:text-slate-700">
+      <Button variant="ghost" size="sm" onClick={() => router.push("/dashboard/clients")} className="gap-2 text-text-muted hover:text-text-secondary">
         <ArrowRight className="h-4 w-4" />
         العودة للعملاء
       </Button>
@@ -427,7 +427,7 @@ export default function ClientDetailPage() {
       {/* Client Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-5">
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 text-4xl font-bold text-primary-700 overflow-hidden shadow-sm">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-surface-elevated text-4xl font-bold text-amber-300 overflow-hidden shadow-sm">
             {client.logo_url ? (
               <img src={client.logo_url} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -435,9 +435,9 @@ export default function ClientDetailPage() {
             )}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">{client.name}</h1>
+            <h1 className="text-2xl font-bold text-text-primary">{client.name}</h1>
             {client.name_en && (
-              <p className="mt-0.5 text-sm text-slate-500">{client.name_en}</p>
+              <p className="mt-0.5 text-sm text-text-muted">{client.name_en}</p>
             )}
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <Badge variant={statusVariant[client.status] || "secondary"}>
@@ -472,8 +472,8 @@ export default function ClientDetailPage() {
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm text-slate-500">{stat.label}</p>
-                      <p className="mt-2 text-3xl font-bold text-slate-900">{formatNumber(stat.value)}</p>
+                      <p className="text-sm text-text-muted">{stat.label}</p>
+                      <p className="mt-2 text-3xl font-bold text-text-primary">{formatNumber(stat.value)}</p>
                     </div>
                     <div className={cn("rounded-xl bg-gradient-to-br p-3 text-white shadow-lg", stat.color)}>
                       <stat.icon className="h-5 w-5" />
@@ -500,8 +500,8 @@ export default function ClientDetailPage() {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Building2 className="h-5 w-5 text-slate-400" />
+                  <CardTitle className="flex items-center gap-2 text-base">
+                  <Building2 className="h-5 w-5 text-text-muted" />
                   معلومات الشركة
                 </CardTitle>
               </CardHeader>
@@ -513,12 +513,12 @@ export default function ClientDetailPage() {
                 />
                 {client.website && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500">الموقع الإلكتروني</span>
+                    <span className="text-sm text-text-muted">الموقع الإلكتروني</span>
                     <a
                       href={client.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:underline"
+                      className="flex items-center gap-1.5 text-sm font-medium text-amber-300 hover:underline"
                       dir="ltr"
                     >
                       {client.website.replace(/^https?:\/\//, "")}
@@ -531,8 +531,8 @@ export default function ClientDetailPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Package className="h-5 w-5 text-slate-400" />
+                  <CardTitle className="flex items-center gap-2 text-base">
+                  <Package className="h-5 w-5 text-text-muted" />
                   تفاصيل الباقة
                 </CardTitle>
               </CardHeader>
@@ -550,8 +550,8 @@ export default function ClientDetailPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Calendar className="h-5 w-5 text-slate-400" />
+                  <CardTitle className="flex items-center gap-2 text-base">
+                  <Calendar className="h-5 w-5 text-text-muted" />
                   العقد
                 </CardTitle>
               </CardHeader>
@@ -567,22 +567,22 @@ export default function ClientDetailPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Target className="h-5 w-5 text-slate-400" />
+                  <CardTitle className="flex items-center gap-2 text-base">
+                  <Target className="h-5 w-5 text-text-muted" />
                   الاستهداف
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <span className="text-sm text-slate-500">الجمهور المستهدف</span>
-                  <p className="mt-1 text-sm font-medium text-slate-700">
+                  <span className="text-sm text-text-muted">الجمهور المستهدف</span>
+                  <p className="mt-1 text-sm font-medium text-text-secondary">
                     {client.target_audience || "غير محدد"}
                   </p>
                 </div>
                 {client.description && (
                   <div>
-                    <span className="text-sm text-slate-500">وصف الشركة</span>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-700">{client.description}</p>
+                    <span className="text-sm text-text-muted">وصف الشركة</span>
+                    <p className="mt-1 text-sm leading-relaxed text-text-secondary">{client.description}</p>
                   </div>
                 )}
               </CardContent>
@@ -594,8 +594,8 @@ export default function ClientDetailPage() {
         <TabsContent value="accounts" className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">الحسابات المتصلة</h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <h2 className="text-lg font-bold text-text-primary">الحسابات المتصلة</h2>
+              <p className="mt-1 text-sm text-text-muted">
                 {accounts.filter((a) => a.is_connected).length} حساب متصل
               </p>
             </div>
@@ -634,9 +634,9 @@ export default function ClientDetailPage() {
             </div>
           ) : accounts.length === 0 ? (
             <Card className="flex flex-col items-center gap-3 p-12 text-center">
-              <Link2 className="h-10 w-10 text-slate-300" />
-              <h3 className="text-lg font-bold text-slate-600">لا توجد حسابات متصلة</h3>
-              <p className="text-sm text-slate-400">قم بربط حسابات التواصل الاجتماعي لإدارتها من هنا</p>
+              <Link2 className="h-10 w-10 text-text-muted" />
+              <h3 className="text-lg font-bold text-text-secondary">لا توجد حسابات متصلة</h3>
+              <p className="text-sm text-text-muted">قم بربط حسابات التواصل الاجتماعي لإدارتها من هنا</p>
               <Button onClick={() => setShowConnectDialog(true)} className="mt-2">
                 <Plus className="h-4 w-4" />
                 ربط حساب جديد
@@ -650,20 +650,20 @@ export default function ClientDetailPage() {
                   <Card key={account.id} className="transition-all hover:shadow-md">
                     <CardContent className="p-5">
                       <div className="flex items-center gap-4">
-                        <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl text-xl", platform?.color || "bg-slate-100")}>
+                        <div className={cn("flex h-12 w-12 items-center justify-center rounded-xl text-xl", platform?.color || "bg-surface-elevated")}>
                           {platform?.emoji || "🔗"}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-bold text-slate-900 truncate">{account.account_name}</h4>
+                            <h4 className="text-sm font-bold text-text-primary truncate">{account.account_name}</h4>
                             <Badge variant={account.is_connected ? "success" : "secondary"}>
                               {account.is_connected ? "متصل" : "غير متصل"}
                             </Badge>
                           </div>
-                          <p className="mt-0.5 text-xs text-slate-400" dir="ltr">
+                          <p className="mt-0.5 text-xs text-text-muted" dir="ltr">
                             {platform?.name || account.platform} • {account.account_id}
                           </p>
-                          <div className="mt-2 flex items-center gap-4 text-xs text-slate-500">
+                          <div className="mt-2 flex items-center gap-4 text-xs text-text-muted">
                             {account.followers_count != null && (
                               <span className="flex items-center gap-1">
                                 <Users className="h-3 w-3" />
@@ -681,7 +681,7 @@ export default function ClientDetailPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-red-500 hover:bg-red-50 hover:text-red-600"
+                          className="text-error-400 hover:bg-error-400/15 hover:text-error-400"
                           disabled={disconnecting === account.id}
                           onClick={() => disconnectAccount(account.id)}
                         >
@@ -716,18 +716,18 @@ export default function ClientDetailPage() {
                     onClick={() => connectPlatform(platform.id)}
                     disabled={connectingPlatform !== null}
                     className={cn(
-                      "flex items-center gap-3 rounded-xl border border-slate-200 p-4 text-right transition-all hover:border-primary-300 hover:bg-primary-50 hover:shadow-sm disabled:opacity-50",
-                      connectingPlatform === platform.id && "border-primary-400 bg-primary-50"
+                      "flex items-center gap-3 rounded-xl border border-border-subtle p-4 text-right transition-all hover:border-amber-400 hover:bg-amber-300/10 hover:shadow-sm disabled:opacity-50",
+                      connectingPlatform === platform.id && "border-amber-400 bg-amber-300/10"
                     )}
                   >
                     <span className={cn("flex h-10 w-10 items-center justify-center rounded-lg text-lg", platform.color)}>
                       {platform.emoji}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-700 truncate">{platform.name}</p>
+                      <p className="text-sm font-semibold text-text-secondary truncate">{platform.name}</p>
                     </div>
                     {connectingPlatform === platform.id && (
-                      <Loader2 className="h-4 w-4 animate-spin text-primary-600" />
+                      <Loader2 className="h-4 w-4 animate-spin text-amber-300" />
                     )}
                   </button>
                 ))}
@@ -751,7 +751,7 @@ export default function ClientDetailPage() {
 
               {discoveredPages.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-bold text-slate-700 mb-3">📘 الصفحات ({discoveredPages.length})</h4>
+                  <h4 className="text-sm font-bold text-text-secondary mb-3">📘 الصفحات ({discoveredPages.length})</h4>
                   <div className="space-y-2">
                     {discoveredPages.map((page) => (
                       <label
@@ -759,17 +759,17 @@ export default function ClientDetailPage() {
                         className={cn(
                           "flex items-center gap-3 rounded-xl border p-3 cursor-pointer transition-all",
                           selectedPages.has(page.id)
-                            ? "border-blue-400 bg-blue-50"
-                            : "border-slate-200 hover:border-slate-300"
+                            ? "border-accent-400 bg-accent-400/15"
+                            : "border-border-subtle hover:border-border-default"
                         )}
                       >
                         <input
                           type="checkbox"
                           checked={selectedPages.has(page.id)}
                           onChange={() => togglePage(page.id)}
-                          className="h-4 w-4 rounded border-slate-300 text-blue-600"
+                          className="h-4 w-4 rounded border-border-default text-accent-400"
                         />
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 overflow-hidden">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-400/15 overflow-hidden">
                           {page.picture ? (
                             <img src={page.picture} alt="" className="h-full w-full object-cover" />
                           ) : (
@@ -777,14 +777,14 @@ export default function ClientDetailPage() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 truncate">{page.name}</p>
-                          <p className="text-xs text-slate-500" dir="ltr">
+                          <p className="text-sm font-semibold text-text-primary truncate">{page.name}</p>
+                          <p className="text-xs text-text-muted" dir="ltr">
                             {page.category || "Page"} • ID: {page.id}
                             {page.business && ` • ${page.business}`}
                           </p>
                         </div>
                         {page.followers > 0 && (
-                          <span className="text-xs text-slate-400 flex items-center gap-1">
+                          <span className="text-xs text-text-muted flex items-center gap-1">
                             <Users className="h-3 w-3" />
                             {formatNumber(page.followers)}
                           </span>
@@ -797,7 +797,7 @@ export default function ClientDetailPage() {
 
               {discoveredAds.length > 0 && (
                 <div className="mt-4">
-                  <h4 className="text-sm font-bold text-slate-700 mb-3">📊 الحسابات الإعلانية ({discoveredAds.length})</h4>
+                  <h4 className="text-sm font-bold text-text-secondary mb-3">📊 الحسابات الإعلانية ({discoveredAds.length})</h4>
                   <div className="space-y-2">
                     {discoveredAds.map((ad) => (
                       <label
@@ -805,22 +805,22 @@ export default function ClientDetailPage() {
                         className={cn(
                           "flex items-center gap-3 rounded-xl border p-3 cursor-pointer transition-all",
                           selectedAds.has(ad.id)
-                            ? "border-emerald-400 bg-emerald-50"
-                            : "border-slate-200 hover:border-slate-300"
+                            ? "border-success-400 bg-success-400/15"
+                            : "border-border-subtle hover:border-border-default"
                         )}
                       >
                         <input
                           type="checkbox"
                           checked={selectedAds.has(ad.id)}
                           onChange={() => toggleAd(ad.id)}
-                          className="h-4 w-4 rounded border-slate-300 text-emerald-600"
+                          className="h-4 w-4 rounded border-border-default text-success-400"
                         />
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
-                          <DollarSign className="h-5 w-5 text-emerald-600" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-400/15">
+                          <DollarSign className="h-5 w-5 text-success-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 truncate">{ad.name || ad.id}</p>
-                          <p className="text-xs text-slate-500" dir="ltr">
+                          <p className="text-sm font-semibold text-text-primary truncate">{ad.name || ad.id}</p>
+                          <p className="text-xs text-text-muted" dir="ltr">
                             {ad.currency || ""} • ID: {ad.id}
                             {ad.business && ` • ${ad.business}`}
                           </p>
@@ -833,9 +833,9 @@ export default function ClientDetailPage() {
 
               {discoveredPages.length === 0 && discoveredAds.length === 0 && (
                 <div className="flex flex-col items-center gap-3 p-8 text-center">
-                  <Link2 className="h-10 w-10 text-slate-300" />
-                  <p className="text-sm text-slate-500">لم يتم العثور على صفحات أو حسابات إعلانية</p>
-                  <p className="text-xs text-slate-400">تأكد من ربط حسابك على Meta من صفحة الإعدادات أولاً</p>
+                  <Link2 className="h-10 w-10 text-text-muted" />
+                  <p className="text-sm text-text-muted">لم يتم العثور على صفحات أو حسابات إعلانية</p>
+                  <p className="text-xs text-text-muted">تأكد من ربط حسابك على Meta من صفحة الإعدادات أولاً</p>
                 </div>
               )}
 
@@ -859,8 +859,8 @@ export default function ClientDetailPage() {
         <TabsContent value="activity" className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">سجل النشاط</h2>
-              <p className="mt-1 text-sm text-slate-500">آخر الأنشطة والعمليات لهذا العميل</p>
+              <h2 className="text-lg font-bold text-text-primary">سجل النشاط</h2>
+              <p className="mt-1 text-sm text-text-muted">آخر الأنشطة والعمليات لهذا العميل</p>
             </div>
             <Button variant="outline" onClick={fetchActivities} disabled={activitiesLoading}>
               <RefreshCw className={cn("h-4 w-4", activitiesLoading && "animate-spin")} />
@@ -885,9 +885,9 @@ export default function ClientDetailPage() {
             </div>
           ) : activities.length === 0 ? (
             <Card className="flex flex-col items-center gap-3 p-12 text-center">
-              <Activity className="h-10 w-10 text-slate-300" />
-              <h3 className="text-lg font-bold text-slate-600">لا يوجد نشاط بعد</h3>
-              <p className="text-sm text-slate-400">ستظهر هنا جميع العمليات التي تتم على هذا العميل</p>
+              <Activity className="h-10 w-10 text-text-muted" />
+              <h3 className="text-lg font-bold text-text-secondary">لا يوجد نشاط بعد</h3>
+              <p className="text-sm text-text-muted">ستظهر هنا جميع العمليات التي تتم على هذا العميل</p>
             </Card>
           ) : (
             <div className="space-y-3">
@@ -898,21 +898,21 @@ export default function ClientDetailPage() {
                       <Activity className="h-5 w-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-700">
+                      <p className="text-sm font-semibold text-text-secondary">
                         {ACTION_TYPE_LABELS[activity.action_type] || activity.action_type}
                       </p>
                       {activity.result && (
-                        <p className="mt-0.5 text-xs text-slate-500 truncate">
+                        <p className="mt-0.5 text-xs text-text-muted truncate">
                           {typeof activity.result === "object"
                             ? activity.result.summary || activity.result.message || JSON.stringify(activity.result).slice(0, 80)
                             : String(activity.result)}
                         </p>
                       )}
                       {activity.details && !activity.result && (
-                        <p className="mt-0.5 text-xs text-slate-500 truncate">{activity.details}</p>
+                        <p className="mt-0.5 text-xs text-text-muted truncate">{activity.details}</p>
                       )}
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400 shrink-0">
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted shrink-0">
                       <Clock className="h-3.5 w-3.5" />
                       {formatDate(activity.created_at)}
                     </div>
@@ -930,8 +930,8 @@ export default function ClientDetailPage() {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-slate-500">{label}</span>
-      <span className="text-sm font-medium text-slate-700">{value}</span>
+      <span className="text-sm text-text-muted">{label}</span>
+      <span className="text-sm font-medium text-text-secondary">{value}</span>
     </div>
   );
 }

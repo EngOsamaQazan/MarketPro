@@ -247,7 +247,7 @@ export async function GET(request: NextRequest) {
           break;
         default:
           return NextResponse.redirect(
-            new URL(`/clients/${company_id}?error=unsupported_platform`, request.url)
+            new URL(`/dashboard/clients/${company_id}?error=unsupported_platform`, request.url)
           );
       }
 
@@ -275,12 +275,12 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.redirect(
-      new URL(`/clients/${company_id}?connected=true`, request.url)
+      new URL(`/dashboard/clients/${company_id}?connected=true`, request.url)
     );
   } catch (error: any) {
     console.error(`[social-accounts/callback] ${platform} error:`, error);
     return NextResponse.redirect(
-      new URL(`/clients/${company_id}?error=callback_failed`, request.url)
+      new URL(`/dashboard/clients/${company_id}?error=callback_failed`, request.url)
     );
   }
 }

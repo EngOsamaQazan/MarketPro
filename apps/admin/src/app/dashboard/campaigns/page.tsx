@@ -84,9 +84,9 @@ interface CampaignSummary {
 }
 
 const healthIcons = {
-  healthy: { icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-50" },
-  warning: { icon: AlertTriangle, color: "text-amber-500", bg: "bg-amber-50" },
-  critical: { icon: AlertTriangle, color: "text-red-500", bg: "bg-red-50" },
+  healthy: { icon: CheckCircle2, color: "text-success-400", bg: "bg-success-400/15" },
+  warning: { icon: AlertTriangle, color: "text-amber-300", bg: "bg-amber-300/15" },
+  critical: { icon: AlertTriangle, color: "text-error-400", bg: "bg-error-400/15" },
 };
 
 const platformEmoji: Record<string, string> = {
@@ -419,7 +419,7 @@ export default function CampaignsPage() {
               </div>
               <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-6">
                 {Array.from({ length: 6 }).map((_, j) => (
-                  <div key={j} className="rounded-xl bg-slate-50 p-3 text-center">
+                  <div key={j} className="rounded-xl bg-surface-hover p-3 text-center">
                     <Skeleton className="mx-auto h-3 w-12" />
                     <Skeleton className="mx-auto mt-2 h-5 w-16" />
                   </div>
@@ -443,9 +443,9 @@ export default function CampaignsPage() {
     return (
       <div className="flex h-96 items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center">
-          <WifiOff className="h-12 w-12 text-slate-300" />
-          <h2 className="text-xl font-bold text-slate-700">لا توجد منصات إعلانية متصلة</h2>
-          <p className="max-w-md text-sm text-slate-500">
+          <WifiOff className="h-12 w-12 text-text-muted" />
+          <h2 className="text-xl font-bold text-text-secondary">لا توجد منصات إعلانية متصلة</h2>
+          <p className="max-w-md text-sm text-text-muted">
             لعرض الحملات الإعلانية، يرجى إضافة مفاتيح API للمنصات الإعلانية (Meta, Google Ads) من صفحة الإعدادات
           </p>
         </div>
@@ -458,8 +458,8 @@ export default function CampaignsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">الحملات الإعلانية</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">الحملات الإعلانية</h1>
+          <p className="mt-1 text-text-muted">
             {summary?.total || 0} حملة • {summary?.active || 0} نشطة
           </p>
         </div>
@@ -484,11 +484,11 @@ export default function CampaignsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-blue-100 p-2.5 text-blue-600">
+              <div className="rounded-xl bg-accent-400/15 p-2.5 text-accent-400">
                 <Eye className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي الوصول</p>
+                <p className="text-sm text-text-muted">إجمالي الوصول</p>
                 <p className="text-xl font-bold">{formatNumber(summary?.totalReach || 0)}</p>
               </div>
             </div>
@@ -497,11 +497,11 @@ export default function CampaignsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-600">
+              <div className="rounded-xl bg-success-400/15 p-2.5 text-success-400">
                 <MousePointerClick className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي النقرات</p>
+                <p className="text-sm text-text-muted">إجمالي النقرات</p>
                 <p className="text-xl font-bold">{formatNumber(summary?.totalClicks || 0)}</p>
               </div>
             </div>
@@ -510,11 +510,11 @@ export default function CampaignsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-purple-100 p-2.5 text-purple-600">
+              <div className="rounded-xl bg-purple-500/15 p-2.5 text-purple-400">
                 <DollarSign className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">إجمالي الإنفاق</p>
+                <p className="text-sm text-text-muted">إجمالي الإنفاق</p>
                 <p className="text-xl font-bold">{formatCurrency(summary?.totalSpend || 0)}</p>
               </div>
             </div>
@@ -523,11 +523,11 @@ export default function CampaignsPage() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-amber-100 p-2.5 text-amber-600">
+              <div className="rounded-xl bg-amber-300/15 p-2.5 text-amber-300">
                 <Target className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">التحويلات</p>
+                <p className="text-sm text-text-muted">التحويلات</p>
                 <p className="text-xl font-bold">{formatNumber(summary?.totalConversions || 0)}</p>
               </div>
             </div>
@@ -538,9 +538,9 @@ export default function CampaignsPage() {
       {/* Campaign Cards */}
       {campaigns.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 p-12 text-center">
-          <Megaphone className="h-10 w-10 text-slate-300" />
-          <h3 className="text-lg font-bold text-slate-600">لا توجد حملات إعلانية</h3>
-          <p className="text-sm text-slate-400">لم يتم العثور على أي حملات في حساباتك الإعلانية</p>
+          <Megaphone className="h-10 w-10 text-text-muted" />
+          <h3 className="text-lg font-bold text-text-secondary">لا توجد حملات إعلانية</h3>
+          <p className="text-sm text-text-muted">لم يتم العثور على أي حملات في حساباتك الإعلانية</p>
         </Card>
       ) : (
         <div className="space-y-6">
@@ -557,17 +557,17 @@ export default function CampaignsPage() {
                     <div className="flex items-center gap-4">
                       <div className={cn(
                         "flex h-12 w-12 items-center justify-center rounded-xl text-xl",
-                        campaign.platform === "google_ads" ? "bg-red-100" :
-                        campaign.platform === "facebook" ? "bg-blue-100" :
-                        campaign.platform === "instagram" ? "bg-pink-100" :
-                        campaign.platform === "tiktok" ? "bg-slate-100" :
-                        "bg-slate-100"
+                        campaign.platform === "google_ads" ? "bg-red-500/15 text-red-400" :
+                        campaign.platform === "facebook" ? "bg-accent-400/15 text-accent-400" :
+                        campaign.platform === "instagram" ? "bg-pink-500/15 text-pink-400" :
+                        campaign.platform === "tiktok" ? "bg-surface-hover" :
+                        "bg-surface-hover"
                       )}>
                         {platformEmoji[campaign.platform] || "📊"}
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">{campaign.name}</h3>
-                        <p className="text-sm text-slate-500">
+                        <h3 className="text-lg font-bold text-text-primary">{campaign.name}</h3>
+                        <p className="text-sm text-text-muted">
                           {campaign.adAccountName && `${campaign.adAccountName} • `}
                           {objectiveLabels[campaign.objective] || campaign.objective}
                         </p>
@@ -584,50 +584,50 @@ export default function CampaignsPage() {
                   </div>
 
                   <div className="mt-6 grid grid-cols-3 gap-3 lg:grid-cols-6">
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">الوصول</p>
-                      <p className="mt-1 text-lg font-bold text-slate-900">{formatNumber(campaign.metrics.reach)}</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">الوصول</p>
+                      <p className="mt-1 text-lg font-bold text-text-primary">{formatNumber(campaign.metrics.reach)}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">النقرات</p>
-                      <p className="mt-1 text-lg font-bold text-slate-900">{formatNumber(campaign.metrics.clicks)}</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">النقرات</p>
+                      <p className="mt-1 text-lg font-bold text-text-primary">{formatNumber(campaign.metrics.clicks)}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">CTR</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">CTR</p>
                       <p className={cn(
                         "mt-1 text-lg font-bold",
-                        campaign.metrics.ctr >= 1 ? "text-emerald-600" : campaign.metrics.ctr >= 0.5 ? "text-amber-600" : "text-red-600"
+                        campaign.metrics.ctr >= 1 ? "text-success-400" : campaign.metrics.ctr >= 0.5 ? "text-amber-300" : "text-error-400"
                       )}>
                         {Number(campaign.metrics.ctr).toFixed(2)}%
                       </p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">CPC</p>
-                      <p className="mt-1 text-lg font-bold text-slate-900">${Number(campaign.metrics.cpc).toFixed(2)}</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">CPC</p>
+                      <p className="mt-1 text-lg font-bold text-text-primary">${Number(campaign.metrics.cpc).toFixed(2)}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">التحويلات</p>
-                      <p className="mt-1 text-lg font-bold text-slate-900">{campaign.metrics.conversions}</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">التحويلات</p>
+                      <p className="mt-1 text-lg font-bold text-text-primary">{campaign.metrics.conversions}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3 text-center">
-                      <p className="text-xs text-slate-500">الإنفاق</p>
-                      <p className="mt-1 text-lg font-bold text-slate-900">${Number(campaign.metrics.spend).toFixed(2)}</p>
+                    <div className="rounded-xl bg-surface-hover p-3 text-center">
+                      <p className="text-xs text-text-muted">الإنفاق</p>
+                      <p className="mt-1 text-lg font-bold text-text-primary">${Number(campaign.metrics.spend).toFixed(2)}</p>
                     </div>
                   </div>
 
                   {totalBudget > 0 && (
                     <div className="mt-5">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-500">
+                        <span className="text-text-muted">
                           الميزانية: {formatCurrency(campaign.spentAmount)} / {formatCurrency(totalBudget)}
                         </span>
-                        <span className="font-semibold text-slate-700">{Math.round(spentPercentage)}%</span>
+                        <span className="font-semibold text-text-secondary">{Math.round(spentPercentage)}%</span>
                       </div>
-                      <div className="mt-2 h-2 w-full rounded-full bg-slate-100">
+                      <div className="mt-2 h-2 w-full rounded-full bg-surface-hover">
                         <div
                           className={cn(
                             "h-2 rounded-full transition-all",
-                            spentPercentage > 90 ? "bg-red-500" : spentPercentage > 70 ? "bg-amber-500" : "bg-primary-500"
+                            spentPercentage > 90 ? "bg-error-400" : spentPercentage > 70 ? "bg-amber-300" : "bg-amber-300"
                           )}
                           style={{ width: `${Math.min(spentPercentage, 100)}%` }}
                         />
@@ -636,7 +636,7 @@ export default function CampaignsPage() {
                   )}
 
                   {campaign.startDate && (
-                    <div className="mt-3 text-xs text-slate-400">
+                    <div className="mt-3 text-xs text-text-muted">
                       بدأت: {new Date(campaign.startDate).toLocaleDateString("ar-SA")}
                       {campaign.endDate && ` • تنتهي: ${new Date(campaign.endDate).toLocaleDateString("ar-SA")}`}
                     </div>
@@ -743,8 +743,8 @@ export default function CampaignsPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 p-4">
-              <h4 className="mb-3 text-sm font-semibold text-slate-700">الاستهداف</h4>
+            <div className="rounded-xl border border-border-subtle p-4">
+              <h4 className="mb-3 text-sm font-semibold text-text-secondary">الاستهداف</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>الحد الأدنى للعمر</Label>
@@ -819,16 +819,16 @@ export default function CampaignsPage() {
           <div className="space-y-4 py-4">
             {optimizing ? (
               <div className="flex flex-col items-center gap-3 py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
-                <p className="text-sm text-slate-500">جاري تحليل الحملات...</p>
+                <Loader2 className="h-8 w-8 animate-spin text-amber-300" />
+                <p className="text-sm text-text-muted">جاري تحليل الحملات...</p>
               </div>
             ) : optimizeResults.length === 0 ? (
-              <p className="py-8 text-center text-sm text-slate-400">لا توجد نتائج</p>
+              <p className="py-8 text-center text-sm text-text-muted">لا توجد نتائج</p>
             ) : (
               optimizeResults.map((result, idx) => (
-                <div key={idx} className="rounded-xl border border-slate-200 p-4">
+                <div key={idx} className="rounded-xl border border-border-subtle p-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-slate-900">{result.campaign_name}</h4>
+                    <h4 className="font-semibold text-text-primary">{result.campaign_name}</h4>
                     {result.success ? (
                       <Badge variant="success">النتيجة: {result.score}/100</Badge>
                     ) : (
@@ -837,16 +837,16 @@ export default function CampaignsPage() {
                   </div>
                   {result.success ? (
                     <>
-                      <p className="mt-2 text-sm text-slate-600">{result.analysis}</p>
+                      <p className="mt-2 text-sm text-text-secondary">{result.analysis}</p>
                       {result.recommendations?.length > 0 && (
                         <div className="mt-3 space-y-2">
-                          <p className="text-xs font-medium text-slate-500">التوصيات:</p>
+                          <p className="text-xs font-medium text-text-muted">التوصيات:</p>
                           {result.recommendations.map((rec: any, rIdx: number) => (
-                            <div key={rIdx} className="flex items-start gap-2 rounded-lg bg-slate-50 p-2 text-sm">
-                              <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+                            <div key={rIdx} className="flex items-start gap-2 rounded-lg bg-surface-hover p-2 text-sm">
+                              <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-300" />
                               <div>
                                 <span className="font-medium">{rec.action}</span>
-                                <span className="text-slate-500"> — {rec.reason}</span>
+                                <span className="text-text-muted"> — {rec.reason}</span>
                               </div>
                             </div>
                           ))}
@@ -854,9 +854,9 @@ export default function CampaignsPage() {
                       )}
                       {result.autoExecuted?.length > 0 && (
                         <div className="mt-3 space-y-1">
-                          <p className="text-xs font-medium text-emerald-600">تم التنفيذ تلقائياً:</p>
+                          <p className="text-xs font-medium text-success-400">تم التنفيذ تلقائياً:</p>
                           {result.autoExecuted.map((ae: any, aIdx: number) => (
-                            <p key={aIdx} className="text-xs text-emerald-500">
+                            <p key={aIdx} className="text-xs text-success-400">
                               {ae.action}: {ae.result}
                             </p>
                           ))}
@@ -864,7 +864,7 @@ export default function CampaignsPage() {
                       )}
                     </>
                   ) : (
-                    <p className="mt-2 text-sm text-red-500">{result.error}</p>
+                    <p className="mt-2 text-sm text-error-400">{result.error}</p>
                   )}
                 </div>
               ))

@@ -26,10 +26,10 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-slate-200 bg-white text-slate-900",
-        success: "border-emerald-200 bg-emerald-50 text-emerald-900",
-        destructive: "border-red-200 bg-red-50 text-red-900",
-        warning: "border-amber-200 bg-amber-50 text-amber-900",
+        default: "border-border-subtle bg-surface-elevated text-text-primary",
+        success: "border-success-400/20 bg-success-400/10 text-success-400",
+        destructive: "border-error-400/20 bg-error-400/10 text-error-400",
+        warning: "border-warning-400/20 bg-warning-400/10 text-warning-400",
       },
     },
     defaultVariants: {
@@ -60,7 +60,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-transparent px-3 text-sm font-medium transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-red-200 group-[.destructive]:hover:border-red-300 group-[.destructive]:hover:bg-red-100 group-[.destructive]:focus:ring-red-500",
+      "inline-flex h-8 shrink-0 items-center justify-center rounded-lg border border-border-default bg-transparent px-3 text-sm font-medium transition-colors hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-surface-card disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-error-400/30 group-[.destructive]:hover:border-error-400/50 group-[.destructive]:hover:bg-error-400/10 group-[.destructive]:focus:ring-error-400",
       className
     )}
     {...props}
@@ -75,7 +75,7 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      "absolute left-2 top-2 rounded-md p-1 text-slate-400 opacity-0 transition-opacity hover:text-slate-900 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
+      "absolute left-2 top-2 rounded-md p-1 text-text-muted opacity-0 transition-opacity hover:text-text-primary focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
       className
     )}
     toast-close=""

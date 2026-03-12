@@ -238,8 +238,8 @@ export default function ClientsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">إدارة العملاء</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">إدارة العملاء</h1>
+          <p className="mt-1 text-text-muted">
             {clients.length} عميل • {clients.filter((c) => c.status === "active").length} نشط
           </p>
         </div>
@@ -257,7 +257,7 @@ export default function ClientsPage() {
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <Input
             type="search"
             placeholder="بحث باسم العميل..."
@@ -283,11 +283,11 @@ export default function ClientsPage() {
 
       {filteredClients.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 p-12 text-center">
-          <Users className="h-10 w-10 text-slate-300" />
-          <h3 className="text-lg font-bold text-slate-600">
+          <Users className="h-10 w-10 text-text-muted" />
+          <h3 className="text-lg font-bold text-text-secondary">
             {clients.length === 0 ? "لا يوجد عملاء بعد" : "لا توجد نتائج"}
           </h3>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-text-muted">
             {clients.length === 0
               ? "ابدأ بإضافة عميل جديد لإدارة حملاته التسويقية"
               : "جرب تغيير معايير البحث"}
@@ -313,8 +313,8 @@ export default function ClientsPage() {
               >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
-                    <Link href={`/clients/${client.id}`} className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 text-2xl font-bold text-primary-700 overflow-hidden">
+                    <Link href={`/dashboard/clients/${client.id}`} className="flex items-center gap-4 hover:opacity-80 transition-opacity">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-300/15 to-amber-300/20 text-2xl font-bold text-amber-300 overflow-hidden">
                         {client.logo_url ? (
                           <img src={client.logo_url} alt="" className="h-full w-full object-cover" />
                         ) : (
@@ -322,9 +322,9 @@ export default function ClientsPage() {
                         )}
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">{client.name}</h3>
+                        <h3 className="text-lg font-bold text-text-primary">{client.name}</h3>
                         {client.name_en && (
-                          <p className="text-sm text-slate-500">{client.name_en}</p>
+                          <p className="text-sm text-text-muted">{client.name_en}</p>
                         )}
                       </div>
                     </Link>
@@ -334,30 +334,30 @@ export default function ClientsPage() {
                   </div>
 
                   <div className="mt-5 grid grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                    <div className="flex items-center gap-2 text-sm text-text-muted">
                       <Building2 className="h-4 w-4" />
                       <span>{industry?.label_ar || client.industry}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                    <div className="flex items-center gap-2 text-sm text-text-muted">
                       <Globe className="h-4 w-4" />
                       <span>
                         {country?.name_ar || client.country}
                         {client.city && ` - ${client.city}`}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                    <div className="flex items-center gap-2 text-sm text-text-muted">
                       <DollarSign className="h-4 w-4" />
                       <span>{formatCurrency(client.monthly_budget)}/شهر</span>
                     </div>
                     {client.contract_start_date && (
-                      <div className="flex items-center gap-2 text-sm text-slate-500">
+                      <div className="flex items-center gap-2 text-sm text-text-muted">
                         <Calendar className="h-4 w-4" />
                         <span>{formatDate(client.contract_start_date)}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
+                  <div className="mt-5 flex items-center justify-between border-t border-border-subtle pt-5">
                     <Badge variant={pkgVariant[pkg?.value || "basic"] || "secondary"}>
                       {pkg?.label_ar || client.package_type}
                     </Badge>
@@ -370,7 +370,7 @@ export default function ClientsPage() {
                       >
                         <Edit3 className="h-4 w-4" />
                       </Button>
-                      <Link href={`/clients/${client.id}`}>
+                      <Link href={`/dashboard/clients/${client.id}`}>
                         <Button variant="outline" size="sm">
                           <ExternalLink className="h-4 w-4" />
                           تفاصيل وحسابات

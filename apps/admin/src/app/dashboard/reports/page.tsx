@@ -235,8 +235,8 @@ export default function ReportsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">التقارير الشهرية</h1>
-          <p className="mt-1 text-slate-500">
+          <h1 className="text-2xl font-bold text-text-primary">التقارير الشهرية</h1>
+          <p className="mt-1 text-text-muted">
             {reports.length} تقرير • {reports.filter((r) => r.status === "sent").length} مُرسل
           </p>
         </div>
@@ -254,9 +254,9 @@ export default function ReportsPage() {
 
       {reports.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 p-12 text-center">
-          <BarChart3 className="h-10 w-10 text-slate-300" />
-          <h3 className="text-lg font-bold text-slate-600">لا توجد تقارير بعد</h3>
-          <p className="text-sm text-slate-400">أنشئ تقرير أداء شهري لعملائك</p>
+          <BarChart3 className="h-10 w-10 text-text-muted" />
+          <h3 className="text-lg font-bold text-text-secondary">لا توجد تقارير بعد</h3>
+          <p className="text-sm text-text-muted">أنشئ تقرير أداء شهري لعملائك</p>
           <Button onClick={() => setShowModal(true)} className="mt-2">
             <Sparkles className="h-4 w-4" />
             إنشاء أول تقرير
@@ -273,18 +273,18 @@ export default function ReportsPage() {
                     <div className="flex items-center gap-4">
                       <div className={cn(
                         "flex h-12 w-12 items-center justify-center rounded-2xl",
-                        report.status === "sent" ? "bg-emerald-100" : report.status === "ready" ? "bg-blue-100" : "bg-purple-100"
+                        report.status === "sent" ? "bg-success-400/10" : report.status === "ready" ? "bg-blue-500/15" : "bg-purple-500/15"
                       )}>
                         <BarChart3 className={cn(
                           "h-6 w-6",
-                          report.status === "sent" ? "text-emerald-600" : report.status === "ready" ? "text-blue-600" : "text-purple-600"
+                          report.status === "sent" ? "text-success-400" : report.status === "ready" ? "text-blue-400" : "text-purple-400"
                         )} />
                       </div>
                       <div>
-                        <h3 className="font-bold text-slate-900">
+                        <h3 className="font-bold text-text-primary">
                           {report.companies?.name || "عميل"}
                         </h3>
-                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <div className="flex items-center gap-2 text-sm text-text-muted">
                           <Calendar className="h-3.5 w-3.5" />
                           تقرير {formatDate(report.month)}
                         </div>
@@ -324,13 +324,13 @@ export default function ReportsPage() {
                   </div>
 
                   {data.summary && (
-                    <p className="mt-4 text-sm text-slate-600 leading-relaxed">{data.summary}</p>
+                    <p className="mt-4 text-sm text-text-secondary leading-relaxed">{data.summary}</p>
                   )}
 
                   {data.ai_insights?.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {data.ai_insights.slice(0, 3).map((insight: string, i: number) => (
-                        <span key={i} className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs text-slate-600">
+                        <span key={i} className="rounded-lg bg-surface-hover px-3 py-1.5 text-xs text-text-secondary">
                           {insight}
                         </span>
                       ))}
@@ -338,7 +338,7 @@ export default function ReportsPage() {
                   )}
 
                   {report.viewed_by_client && (
-                    <p className="mt-3 flex items-center gap-1 text-xs text-emerald-600">
+                    <p className="mt-3 flex items-center gap-1 text-xs text-success-400">
                       <CheckCircle2 className="h-3.5 w-3.5" />
                       شوهد من قبل العميل
                     </p>
@@ -354,7 +354,7 @@ export default function ReportsPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              <Sparkles className="inline h-5 w-5 text-primary-600 ml-2" />
+              <Sparkles className="inline h-5 w-5 text-amber-300 ml-2" />
               إنشاء تقرير شهري
             </DialogTitle>
             <DialogDescription>

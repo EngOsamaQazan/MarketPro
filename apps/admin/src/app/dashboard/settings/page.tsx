@@ -45,8 +45,8 @@ const SERVICES: ServiceConfig[] = [
     id: "anthropic",
     label: "Anthropic Claude AI",
     icon: <Cpu className="h-5 w-5" />,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/15",
     description: "محرك الذكاء الاصطناعي الأساسي للنظام — توليد خطط التسويق، المحتوى، وتحسين الحملات",
     docsUrl: "https://console.anthropic.com/",
     keys: [
@@ -91,8 +91,8 @@ const SERVICES: ServiceConfig[] = [
     id: "meta",
     label: "Meta (Facebook + Instagram)",
     icon: <Globe className="h-5 w-5" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/15",
     description: "إدارة صفحات فيسبوك، حسابات إنستغرام، والحملات الإعلانية",
     docsUrl: "https://developers.facebook.com/",
     keys: [
@@ -219,8 +219,8 @@ const SERVICES: ServiceConfig[] = [
     id: "tiktok",
     label: "TikTok",
     icon: <Zap className="h-5 w-5" />,
-    color: "text-slate-700",
-    bgColor: "bg-slate-50",
+    color: "text-text-secondary",
+    bgColor: "bg-surface-hover",
     description: "نشر المحتوى وإدارة الحملات الإعلانية على تيك توك",
     docsUrl: "https://developers.tiktok.com/",
     keys: [
@@ -255,8 +255,8 @@ const SERVICES: ServiceConfig[] = [
     id: "x",
     label: "X (Twitter)",
     icon: <Hash className="h-5 w-5" />,
-    color: "text-slate-800",
-    bgColor: "bg-slate-50",
+    color: "text-text-primary",
+    bgColor: "bg-surface-hover",
     description: "نشر التغريدات وإدارة الحساب ومتابعة التفاعلات",
     docsUrl: "https://developer.x.com/en/portal/dashboard",
     keys: [
@@ -296,8 +296,8 @@ const SERVICES: ServiceConfig[] = [
     id: "snapchat",
     label: "Snapchat",
     icon: <Zap className="h-5 w-5" />,
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-50",
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-500/15",
     description: "إدارة الحملات الإعلانية على سناب شات",
     docsUrl: "https://business.snapchat.com/",
     keys: [
@@ -331,8 +331,8 @@ const SERVICES: ServiceConfig[] = [
     id: "linkedin",
     label: "LinkedIn",
     icon: <User className="h-5 w-5" />,
-    color: "text-blue-700",
-    bgColor: "bg-blue-50",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/15",
     description: "نشر المحتوى المهني وإدارة صفحات الشركات",
     docsUrl: "https://www.linkedin.com/developers/",
     keys: [
@@ -367,8 +367,8 @@ const SERVICES: ServiceConfig[] = [
     id: "youtube",
     label: "YouTube / Google",
     icon: <Globe className="h-5 w-5" />,
-    color: "text-red-600",
-    bgColor: "bg-red-50",
+    color: "text-red-400",
+    bgColor: "bg-red-500/15",
     description: "إدارة القنوات، نشر الفيديوهات، والاطلاع على التحليلات",
     docsUrl: "https://console.cloud.google.com/",
     keys: [
@@ -415,8 +415,8 @@ const SERVICES: ServiceConfig[] = [
     id: "google_ads",
     label: "Google Ads",
     icon: <Settings className="h-5 w-5" />,
-    color: "text-green-600",
-    bgColor: "bg-green-50",
+    color: "text-green-400",
+    bgColor: "bg-green-500/15",
     description: "إدارة الحملات الإعلانية في Google Search و Display",
     docsUrl: "https://ads.google.com/",
     keys: [
@@ -466,25 +466,25 @@ function SetupGuide({ guide, serviceId }: { guide: GuideStep[]; serviceId: strin
   const [currentStep, setCurrentStep] = useState(0);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden mb-6">
+    <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden mb-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between px-6 py-4 hover:bg-surface-hover transition-colors"
       >
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-400">
             <BookOpen className="h-4 w-4" />
           </div>
           <div className="text-start">
-            <p className="text-sm font-bold text-slate-900">دليل الإعداد خطوة بخطوة</p>
-            <p className="text-xs text-slate-500">{guide.length} خطوات — اضغط لعرض الدليل المفصّل</p>
+            <p className="text-sm font-bold text-text-primary">دليل الإعداد خطوة بخطوة</p>
+            <p className="text-xs text-text-muted">{guide.length} خطوات — اضغط لعرض الدليل المفصّل</p>
           </div>
         </div>
-        <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-5 w-5 text-text-muted transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div className="border-t border-slate-100 p-6 bg-gradient-to-b from-slate-50/50 to-white">
+        <div className="border-t border-border-subtle p-6 bg-gradient-to-b from-surface-hover/50 to-surface-card">
           {/* Progress dots */}
           <div className="flex items-center justify-center gap-2 mb-8">
             {guide.map((_, i) => (
@@ -493,55 +493,55 @@ function SetupGuide({ guide, serviceId }: { guide: GuideStep[]; serviceId: strin
                   onClick={() => setCurrentStep(i)}
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                     i === currentStep
-                      ? "bg-primary-600 text-white shadow-lg shadow-primary-600/30 scale-110"
+                      ? "bg-amber-300 text-white shadow-lg shadow-amber-400/30 scale-110"
                       : i < currentStep
                       ? "bg-green-500 text-white"
-                      : "bg-slate-200 text-slate-500"
+                      : "bg-surface-hover text-text-muted"
                   }`}
                 >
                   {i < currentStep ? <Check className="h-3.5 w-3.5" /> : i + 1}
                 </button>
                 {i < guide.length - 1 && (
-                  <div className={`h-0.5 w-8 rounded-full ${i < currentStep ? "bg-green-400" : "bg-slate-200"}`} />
+                  <div className={`h-0.5 w-8 rounded-full ${i < currentStep ? "bg-green-400" : "bg-surface-hover"}`} />
                 )}
               </div>
             ))}
           </div>
 
           {/* Step content */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <div className="rounded-xl border border-border-subtle bg-surface-card p-6">
             <div className="flex items-start gap-4 mb-5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-white font-bold">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-300 text-white font-bold">
                 {currentStep + 1}
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">{guide[currentStep].title}</h3>
-                <p className="text-sm text-slate-500 mt-1">{guide[currentStep].description}</p>
+                <h3 className="text-base font-bold text-text-primary">{guide[currentStep].title}</h3>
+                <p className="text-sm text-text-muted mt-1">{guide[currentStep].description}</p>
               </div>
             </div>
 
             <div className="space-y-2.5 mb-5">
               {guide[currentStep].instructions.map((inst, i) => (
-                <div key={i} className="flex items-start gap-3 rounded-lg bg-slate-50 p-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary-600 text-[10px] font-bold text-white">
+                <div key={i} className="flex items-start gap-3 rounded-lg bg-surface-hover p-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-amber-300 text-[10px] font-bold text-white">
                     {i + 1}
                   </span>
-                  <span className="text-sm text-slate-700 leading-relaxed">{inst}</span>
+                  <span className="text-sm text-text-secondary leading-relaxed">{inst}</span>
                 </div>
               ))}
             </div>
 
             {guide[currentStep].notes?.map((note, i) => (
-              <div key={i} className="flex items-start gap-2.5 rounded-lg bg-blue-50 border border-blue-100 p-3 mb-2">
-                <Info className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
-                <span className="text-xs text-blue-700">{note}</span>
+              <div key={i} className="flex items-start gap-2.5 rounded-lg bg-blue-500/15 border border-blue-500/30 p-3 mb-2">
+                <Info className="h-4 w-4 text-blue-400 mt-0.5 shrink-0" />
+                <span className="text-xs text-blue-400">{note}</span>
               </div>
             ))}
 
             {guide[currentStep].warnings?.map((warn, i) => (
-              <div key={i} className="flex items-start gap-2.5 rounded-lg bg-amber-50 border border-amber-100 p-3 mb-2">
-                <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
-                <span className="text-xs text-amber-700 font-medium">{warn}</span>
+              <div key={i} className="flex items-start gap-2.5 rounded-lg bg-amber-500/15 border border-amber-500/30 p-3 mb-2">
+                <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+                <span className="text-xs text-amber-400 font-medium">{warn}</span>
               </div>
             ))}
 
@@ -550,7 +550,7 @@ function SetupGuide({ guide, serviceId }: { guide: GuideStep[]; serviceId: strin
                 href={guide[currentStep].link!.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-3 rounded-lg bg-primary-50 px-4 py-2.5 text-xs font-semibold text-primary-600 hover:bg-primary-100 transition-colors"
+                className="inline-flex items-center gap-2 mt-3 rounded-lg bg-amber-300/10 px-4 py-2.5 text-xs font-semibold text-amber-300 hover:bg-amber-300/15 transition-colors"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
                 {guide[currentStep].link!.label}
@@ -558,22 +558,22 @@ function SetupGuide({ guide, serviceId }: { guide: GuideStep[]; serviceId: strin
             )}
 
             {/* Navigation */}
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-100">
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-border-subtle">
               <button
                 onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
                 disabled={currentStep === 0}
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1.5 text-sm text-text-muted hover:text-amber-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight className="h-4 w-4" />
                 السابق
               </button>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-text-muted">
                 {currentStep + 1} / {guide.length}
               </span>
               <button
                 onClick={() => setCurrentStep(Math.min(guide.length - 1, currentStep + 1))}
                 disabled={currentStep === guide.length - 1}
-                className="flex items-center gap-1.5 text-sm text-primary-600 font-medium hover:text-primary-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1.5 text-sm text-amber-300 font-medium hover:text-amber-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 التالي
                 <ChevronLeft className="h-4 w-4" />
@@ -788,14 +788,14 @@ export default function SettingsPage() {
     if (params.get("success") === "google_ads_connected") {
       setMessage({ type: "success", text: "تم ربط حساب Google Ads بنجاح! تم حفظ Refresh Token تلقائياً." });
       setActiveService("google_ads");
-      window.history.replaceState({}, "", "/settings");
+      window.history.replaceState({}, "", "/dashboard/settings");
       fetchKeys();
     }
 
     if (params.get("success") === "meta_connected") {
       setMessage({ type: "success", text: "تم ربط حساب فيسبوك بنجاح! الآن يمكنك الوصول لجميع الصفحات والحسابات الإعلانية." });
       setActiveService("meta");
-      window.history.replaceState({}, "", "/settings");
+      window.history.replaceState({}, "", "/dashboard/settings");
       fetchKeys();
     }
 
@@ -810,7 +810,7 @@ export default function SettingsPage() {
       };
       setMessage({ type: "error", text: errorMessages[error] || "خطأ في ربط Google Ads" });
       setActiveService("google_ads");
-      window.history.replaceState({}, "", "/settings");
+      window.history.replaceState({}, "", "/dashboard/settings");
     }
 
     if (error?.startsWith("meta_")) {
@@ -824,23 +824,23 @@ export default function SettingsPage() {
       };
       setMessage({ type: "error", text: errorMessages[error] || "خطأ في ربط Meta" });
       setActiveService("meta");
-      window.history.replaceState({}, "", "/settings");
+      window.history.replaceState({}, "", "/dashboard/settings");
     }
   }, []);
 
   const activeConfig = SERVICES.find((s) => s.id === activeService)!;
 
   return (
-    <div className="min-h-screen -m-6 bg-slate-50/50">
+    <div className="min-h-screen -m-6 bg-surface-hover/50">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-8 py-5">
+      <div className="bg-surface-card border-b border-border-subtle px-8 py-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 text-white">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-indigo-500 text-white">
             <Settings className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">إعدادات النظام</h1>
-            <p className="text-sm text-slate-500">إدارة مفاتيح API والتكامل مع المنصات الخارجية</p>
+            <h1 className="text-xl font-bold text-text-primary">إعدادات النظام</h1>
+            <p className="text-sm text-text-muted">إدارة مفاتيح API والتكامل مع المنصات الخارجية</p>
           </div>
         </div>
       </div>
@@ -848,7 +848,7 @@ export default function SettingsPage() {
       {/* Message toast */}
       {message && (
         <div className={`mx-8 mt-4 flex items-center gap-3 rounded-xl border p-4 ${
-          message.type === "success" ? "bg-green-50 border-green-200 text-green-700" : "bg-red-50 border-red-200 text-red-700"
+          message.type === "success" ? "bg-green-500/15 border-green-500/30 text-green-400" : "bg-red-500/15 border-red-500/30 text-red-400"
         }`}>
           {message.type === "success" ? <CheckCircle className="h-5 w-5 shrink-0" /> : <AlertTriangle className="h-5 w-5 shrink-0" />}
           <span className="text-sm font-medium">{message.text}</span>
@@ -858,9 +858,9 @@ export default function SettingsPage() {
 
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-72 min-w-[288px] bg-white border-l border-slate-200 min-h-[calc(100vh-80px)] py-4">
+        <div className="w-72 min-w-[288px] bg-surface-card border-l border-border-subtle min-h-[calc(100vh-80px)] py-4">
           <div className="px-4 mb-3">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">الخدمات المتصلة</p>
+            <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">الخدمات المتصلة</p>
           </div>
           <div className="space-y-0.5 px-3">
             {SERVICES.map((service) => {
@@ -874,56 +874,56 @@ export default function SettingsPage() {
                   onClick={() => setActiveService(service.id)}
                   className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-start transition-all ${
                     isActive
-                      ? "bg-primary-50 border-r-[3px] border-primary-600"
-                      : "hover:bg-slate-50"
+                      ? "bg-amber-300/10 border-r-[3px] border-amber-400"
+                      : "hover:bg-surface-hover"
                   }`}
                 >
                   <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    isActive ? "bg-primary-600 text-white" : `${service.bgColor} ${service.color}`
+                    isActive ? "bg-amber-300 text-white" : `${service.bgColor} ${service.color}`
                   }`}>
                     {service.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-semibold truncate ${isActive ? "text-primary-700" : "text-slate-700"}`}>
+                    <p className={`text-sm font-semibold truncate ${isActive ? "text-amber-300" : "text-text-secondary"}`}>
                       {service.label}
                     </p>
-                    <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                    <p className="text-[11px] text-text-muted truncate mt-0.5">
                       {configured}/{total} مفاتيح مُعدّة
                     </p>
                   </div>
                   {configured === total && total > 0 ? (
-                    <CheckCircle className="h-4 w-4 text-green-500 shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 shrink-0" />
                   ) : configured > 0 ? (
                     <div className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
                   ) : (
-                    <div className="h-2 w-2 rounded-full bg-slate-200 shrink-0" />
+                    <div className="h-2 w-2 rounded-full bg-surface-hover shrink-0" />
                   )}
                 </button>
               );
             })}
 
             {/* AI Auto Management section */}
-            <div className="border-t border-slate-100 mt-4 pt-4">
+            <div className="border-t border-border-subtle mt-4 pt-4">
               <button
                 onClick={() => setActiveService("ai_settings")}
                 className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-start transition-all ${
                   activeService === "ai_settings"
-                    ? "bg-primary-50 border-r-[3px] border-primary-600"
-                    : "hover:bg-slate-50"
+                    ? "bg-amber-300/10 border-r-[3px] border-amber-400"
+                    : "hover:bg-surface-hover"
                 }`}
               >
                 <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
                   activeService === "ai_settings"
-                    ? "bg-primary-600 text-white"
+                    ? "bg-amber-300 text-white"
                     : "bg-gradient-to-br from-purple-500 to-indigo-600 text-white"
                 }`}>
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className={`text-sm font-semibold ${activeService === "ai_settings" ? "text-primary-700" : "text-slate-700"}`}>
+                  <p className={`text-sm font-semibold ${activeService === "ai_settings" ? "text-amber-300" : "text-text-secondary"}`}>
                     الإدارة الذكية
                   </p>
-                  <p className="text-[11px] text-slate-400">التشغيل التلقائي بالـ AI</p>
+                  <p className="text-[11px] text-text-muted">التشغيل التلقائي بالـ AI</p>
                 </div>
               </button>
             </div>
@@ -934,8 +934,8 @@ export default function SettingsPage() {
         <div className="flex-1 min-w-0 p-8 max-w-[860px]">
           {loading ? (
             <div className="flex items-center justify-center py-32">
-              <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
-              <span className="mr-3 text-slate-500">جاري تحميل الإعدادات...</span>
+              <Loader2 className="h-8 w-8 animate-spin text-amber-300" />
+              <span className="mr-3 text-text-muted">جاري تحميل الإعدادات...</span>
             </div>
           ) : activeService === "ai_settings" ? (
             /* ──── AI Settings Panel ──── */
@@ -945,21 +945,21 @@ export default function SettingsPage() {
                   <Sparkles className="h-6 w-6" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">الإدارة الذكية المستقلة</h2>
-                  <p className="text-sm text-slate-500">تحكّم بأتمتة الذكاء الاصطناعي لإدارة التسويق</p>
+                  <h2 className="text-lg font-bold text-text-primary">الإدارة الذكية المستقلة</h2>
+                  <p className="text-sm text-text-muted">تحكّم بأتمتة الذكاء الاصطناعي لإدارة التسويق</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+              <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden">
                 {AI_SETTINGS.map((setting, i) => (
-                  <div key={setting.key} className={`flex items-center justify-between p-5 ${i !== AI_SETTINGS.length - 1 ? "border-b border-slate-100" : ""}`}>
+                  <div key={setting.key} className={`flex items-center justify-between p-5 ${i !== AI_SETTINGS.length - 1 ? "border-b border-border-subtle" : ""}`}>
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-elevated text-text-muted">
                         {setting.icon}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-slate-900">{setting.label}</p>
-                        <p className="text-xs text-slate-500">{setting.desc}</p>
+                        <p className="text-sm font-semibold text-text-primary">{setting.label}</p>
+                        <p className="text-xs text-text-muted">{setting.desc}</p>
                       </div>
                     </div>
                     <label className="relative inline-flex cursor-pointer items-center">
@@ -969,7 +969,7 @@ export default function SettingsPage() {
                         checked={aiToggles[setting.key] ?? false}
                         onChange={(e) => setAiToggles((prev) => ({ ...prev, [setting.key]: e.target.checked }))}
                       />
-                      <div className="peer h-6 w-11 rounded-full bg-slate-300 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full" />
+                      <div className="peer h-6 w-11 rounded-full bg-surface-elevated after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-surface-card after:transition-all peer-checked:bg-amber-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full" />
                     </label>
                   </div>
                 ))}
@@ -984,14 +984,14 @@ export default function SettingsPage() {
                   {activeConfig.icon}
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-bold text-slate-900">{activeConfig.label}</h2>
-                  <p className="text-sm text-slate-500">{activeConfig.description}</p>
+                  <h2 className="text-lg font-bold text-text-primary">{activeConfig.label}</h2>
+                  <p className="text-sm text-text-muted">{activeConfig.description}</p>
                 </div>
                 <a
                   href={activeConfig.docsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-500 hover:text-primary-600 hover:border-primary-200 transition-colors"
+                  className="flex items-center gap-1.5 rounded-lg border border-border-subtle px-3 py-2 text-xs text-text-muted hover:text-amber-300 hover:border-amber-400/50 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   المستندات
@@ -999,38 +999,38 @@ export default function SettingsPage() {
               </div>
 
               {/* Connection Status */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
+              <div className="rounded-2xl border border-border-subtle bg-surface-card p-5 mb-6">
                 <div className="flex items-center gap-4">
                   {getConfiguredCount(activeConfig) === activeConfig.keys.length ? (
                     <>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-500">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15 text-green-400">
                         <CheckCircle className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-green-700">تم التكوين</p>
-                        <p className="text-xs text-green-600">جميع مفاتيح API محفوظة ومُفعّلة</p>
+                        <p className="text-sm font-bold text-green-400">تم التكوين</p>
+                        <p className="text-xs text-green-400">جميع مفاتيح API محفوظة ومُفعّلة</p>
                       </div>
                     </>
                   ) : getConfiguredCount(activeConfig) > 0 ? (
                     <>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/15 text-amber-400">
                         <AlertTriangle className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-amber-700">تكوين جزئي</p>
-                        <p className="text-xs text-amber-600">
+                        <p className="text-sm font-bold text-amber-400">تكوين جزئي</p>
+                        <p className="text-xs text-amber-400">
                           {getConfiguredCount(activeConfig)} من {activeConfig.keys.length} مفاتيح مُعدّة — أكمل بقية المفاتيح
                         </p>
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface-elevated text-text-muted">
                         <Plug className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-700">غير مُكوّن</p>
-                        <p className="text-xs text-slate-500">أدخل مفاتيح API لتفعيل التكامل — اتبع الدليل أدناه</p>
+                        <p className="text-sm font-bold text-text-secondary">غير مُكوّن</p>
+                        <p className="text-xs text-text-muted">أدخل مفاتيح API لتفعيل التكامل — اتبع الدليل أدناه</p>
                       </div>
                     </>
                   )}
@@ -1039,14 +1039,14 @@ export default function SettingsPage() {
 
               {/* OAuth Connect Button for Meta */}
               {activeConfig.id === "meta" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
+                <div className="rounded-2xl border border-border-subtle bg-surface-card p-5 mb-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
                       <Link2 className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-bold text-slate-900">ربط حسابك على فيسبوك عبر OAuth</p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-sm font-bold text-text-primary">ربط حسابك على فيسبوك عبر OAuth</p>
+                      <p className="text-xs text-text-muted mt-0.5">
                         سجّل دخول بحسابك الشخصي لجلب جميع الصفحات والحسابات الإعلانية عبر كل Business Portfolios
                       </p>
                     </div>
@@ -1065,33 +1065,33 @@ export default function SettingsPage() {
                   </div>
 
                   {(!getKeyForService("meta", "app_id") || !getKeyForService("meta", "app_secret")) && (
-                    <p className="text-xs text-amber-600 mt-3 flex items-center gap-1.5">
+                    <p className="text-xs text-amber-400 mt-3 flex items-center gap-1.5">
                       <AlertTriangle className="h-3.5 w-3.5" />
                       أضف App ID و App Secret أولاً لتفعيل زر الربط
                     </p>
                   )}
 
                   {metaConnectedInfo && (
-                    <div className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+                    <div className="mt-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-600" />
-                        <p className="text-sm font-bold text-emerald-800">متصل بحساب: {metaConnectedInfo.name}</p>
+                        <CheckCircle className="h-4 w-4 text-emerald-400" />
+                        <p className="text-sm font-bold text-emerald-400">متصل بحساب: {metaConnectedInfo.name}</p>
                       </div>
                       <div className="grid grid-cols-3 gap-3 mt-3">
-                        <div className="rounded-lg bg-white p-2.5 text-center">
-                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.pages}</p>
-                          <p className="text-[10px] text-slate-500">صفحة</p>
+                        <div className="rounded-lg bg-surface-card p-2.5 text-center">
+                          <p className="text-lg font-bold text-text-primary">{metaConnectedInfo.pages}</p>
+                          <p className="text-[10px] text-text-muted">صفحة</p>
                         </div>
-                        <div className="rounded-lg bg-white p-2.5 text-center">
-                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.businesses}</p>
-                          <p className="text-[10px] text-slate-500">Portfolio</p>
+                        <div className="rounded-lg bg-surface-card p-2.5 text-center">
+                          <p className="text-lg font-bold text-text-primary">{metaConnectedInfo.businesses}</p>
+                          <p className="text-[10px] text-text-muted">Portfolio</p>
                         </div>
-                        <div className="rounded-lg bg-white p-2.5 text-center">
-                          <p className="text-lg font-bold text-slate-900">{metaConnectedInfo.ad_accounts}</p>
-                          <p className="text-[10px] text-slate-500">حساب إعلاني</p>
+                        <div className="rounded-lg bg-surface-card p-2.5 text-center">
+                          <p className="text-lg font-bold text-text-primary">{metaConnectedInfo.ad_accounts}</p>
+                          <p className="text-[10px] text-text-muted">حساب إعلاني</p>
                         </div>
                       </div>
-                      <p className="text-[10px] text-emerald-600 mt-2">
+                      <p className="text-[10px] text-emerald-400 mt-2">
                         آخر ربط: {new Date(metaConnectedInfo.connected_at).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
@@ -1101,14 +1101,14 @@ export default function SettingsPage() {
 
               {/* OAuth Connect Button for Google Ads */}
               {activeConfig.id === "google_ads" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
+                <div className="rounded-2xl border border-border-subtle bg-surface-card p-5 mb-6">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/15 text-blue-400">
                       <Link2 className="h-6 w-6" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-bold text-slate-900">ربط حساب Google Ads عبر OAuth</p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-sm font-bold text-text-primary">ربط حساب Google Ads عبر OAuth</p>
+                      <p className="text-xs text-text-muted mt-0.5">
                         بعد إضافة Client ID و Client Secret، اضغط الزر للربط والحصول على Refresh Token تلقائياً
                       </p>
                     </div>
@@ -1126,7 +1126,7 @@ export default function SettingsPage() {
                     </button>
                   </div>
                   {(!getKeyForService("google_ads", "client_id") || !getKeyForService("google_ads", "client_secret")) && (
-                    <p className="text-xs text-amber-600 mt-3 flex items-center gap-1.5">
+                    <p className="text-xs text-amber-400 mt-3 flex items-center gap-1.5">
                       <AlertTriangle className="h-3.5 w-3.5" />
                       أضف Client ID و Client Secret أولاً لتفعيل زر الربط
                     </p>
@@ -1136,17 +1136,17 @@ export default function SettingsPage() {
 
               {/* Google Ads Account Manager */}
               {activeConfig.id === "google_ads" && (
-                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden mb-6">
-                  <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-l from-slate-50 to-white">
+                <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden mb-6">
+                  <div className="px-6 py-4 border-b border-border-subtle bg-gradient-to-l from-surface-hover to-surface-card">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-primary-600" />
-                        <h3 className="text-sm font-bold text-slate-900">إدارة الحسابات الإعلانية</h3>
+                        <Users className="h-4 w-4 text-amber-300" />
+                        <h3 className="text-sm font-bold text-text-primary">إدارة الحسابات الإعلانية</h3>
                       </div>
                       <button
                         onClick={fetchGadsAccounts}
                         disabled={gadsLoading}
-                        className="flex items-center gap-1.5 rounded-lg bg-primary-50 px-3 py-2 text-xs font-semibold text-primary-600 hover:bg-primary-100 disabled:opacity-50 transition-colors"
+                        className="flex items-center gap-1.5 rounded-lg bg-amber-300/10 px-3 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-300/15 disabled:opacity-50 transition-colors"
                       >
                         {gadsLoading ? (
                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -1156,7 +1156,7 @@ export default function SettingsPage() {
                         {gadsLoaded ? "تحديث" : "جلب الحسابات"}
                       </button>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-text-muted mt-1">
                       اختر الحسابات الإعلانية التي تريد إدارتها من النظام وسمّ كل حساب باسم النشاط التجاري
                     </p>
                   </div>
@@ -1164,16 +1164,16 @@ export default function SettingsPage() {
                   <div className="p-6">
                     {!gadsLoaded ? (
                       <div className="text-center py-8">
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mx-auto mb-3">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface-elevated text-text-muted mx-auto mb-3">
                           <Users className="h-6 w-6" />
                         </div>
-                        <p className="text-sm text-slate-500 mb-1">لم يتم جلب الحسابات بعد</p>
-                        <p className="text-xs text-slate-400">اضغط &quot;جلب الحسابات&quot; لعرض جميع الحسابات المتاحة في Google Ads</p>
+                        <p className="text-sm text-text-muted mb-1">لم يتم جلب الحسابات بعد</p>
+                        <p className="text-xs text-text-muted">اضغط &quot;جلب الحسابات&quot; لعرض جميع الحسابات المتاحة في Google Ads</p>
                       </div>
                     ) : gadsAccounts.length === 0 ? (
                       <div className="text-center py-8">
-                        <p className="text-sm text-slate-500">لا توجد حسابات متاحة</p>
-                        <p className="text-xs text-slate-400 mt-1">تأكد من ربط حساب Google Ads أولاً</p>
+                        <p className="text-sm text-text-muted">لا توجد حسابات متاحة</p>
+                        <p className="text-xs text-text-muted mt-1">تأكد من ربط حساب Google Ads أولاً</p>
                       </div>
                     ) : (
                       <>
@@ -1183,8 +1183,8 @@ export default function SettingsPage() {
                               key={account.id}
                               className={`flex items-center gap-4 rounded-xl border p-4 transition-all ${
                                 account.selected
-                                  ? "border-primary-200 bg-primary-50/50"
-                                  : "border-slate-100 bg-slate-50/50 hover:border-slate-200"
+                                  ? "border-amber-400/50 bg-amber-300/10"
+                                  : "border-border-subtle bg-surface-hover/50 hover:border-border-subtle"
                               }`}
                             >
                               <label className="relative flex cursor-pointer items-center">
@@ -1194,21 +1194,21 @@ export default function SettingsPage() {
                                   checked={account.selected}
                                   onChange={() => toggleGadsAccount(account.id)}
                                 />
-                                <div className="flex h-6 w-6 items-center justify-center rounded-lg border-2 transition-all peer-checked:bg-primary-600 peer-checked:border-primary-600 border-slate-300">
+                                <div className="flex h-6 w-6 items-center justify-center rounded-lg border-2 transition-all peer-checked:bg-amber-300 peer-checked:border-amber-400 border-border-default">
                                   {account.selected && <Check className="h-3.5 w-3.5 text-white" />}
                                 </div>
                               </label>
 
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1.5">
-                                  <span className="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded" dir="ltr">
+                                  <span className="text-xs font-mono text-text-muted bg-surface-elevated px-2 py-0.5 rounded" dir="ltr">
                                     {account.id.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")}
                                   </span>
                                 </div>
                                 {account.selected && (
                                   <input
                                     type="text"
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                                    className="w-full rounded-lg border border-border-subtle bg-surface-card px-3 py-2 text-sm text-text-secondary placeholder:text-text-muted focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 outline-none transition-all"
                                     placeholder="اسم النشاط التجاري (مثال: الفاخر للشقق الفندقيه)"
                                     value={account.name}
                                     onChange={(e) => updateGadsName(account.id, e.target.value)}
@@ -1220,14 +1220,14 @@ export default function SettingsPage() {
                           ))}
                         </div>
 
-                        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100">
-                          <p className="text-xs text-slate-500">
+                        <div className="flex items-center justify-between mt-5 pt-4 border-t border-border-subtle">
+                          <p className="text-xs text-text-muted">
                             {gadsAccounts.filter((a) => a.selected).length} من {gadsAccounts.length} حساب مُختار
                           </p>
                           <button
                             onClick={saveGadsAccounts}
                             disabled={gadsSaving || gadsAccounts.filter((a) => a.selected).length === 0}
-                            className="flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                            className="flex items-center gap-2 rounded-xl bg-amber-300 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                           >
                             {gadsSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                             حفظ الحسابات المُختارة
@@ -1243,11 +1243,11 @@ export default function SettingsPage() {
               <SetupGuide guide={activeConfig.guide} serviceId={activeConfig.id} />
 
               {/* Security Notice */}
-              <div className="flex items-start gap-3 rounded-xl bg-blue-50 border border-blue-100 p-4 mb-6">
-                <Shield className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
+              <div className="flex items-start gap-3 rounded-xl bg-blue-500/15 border border-blue-500/30 p-4 mb-6">
+                <Shield className="h-5 w-5 text-blue-400 mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold text-blue-800">حماية البيانات</p>
-                  <p className="text-[11px] text-blue-600 mt-0.5">
+                  <p className="text-xs font-semibold text-blue-400">حماية البيانات</p>
+                  <p className="text-[11px] text-blue-400 mt-0.5">
                     المفاتيح تُحفظ مشفرة في قاعدة البيانات. فقط المديرون يمكنهم عرضها أو تعديلها.
                     لتحديث مفتاح موجود، أدخل القيمة الجديدة واضغط حفظ.
                   </p>
@@ -1255,11 +1255,11 @@ export default function SettingsPage() {
               </div>
 
               {/* API Key Fields */}
-              <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
-                <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-l from-slate-50 to-white">
+              <div className="rounded-2xl border border-border-subtle bg-surface-card overflow-hidden">
+                <div className="px-6 py-4 border-b border-border-subtle bg-gradient-to-l from-surface-hover to-surface-card">
                   <div className="flex items-center gap-2">
-                    <Key className="h-4 w-4 text-primary-600" />
-                    <h3 className="text-sm font-bold text-slate-900">بيانات الاعتماد</h3>
+                    <Key className="h-4 w-4 text-amber-300" />
+                    <h3 className="text-sm font-bold text-text-primary">بيانات الاعتماد</h3>
                   </div>
                 </div>
 
@@ -1276,11 +1276,11 @@ export default function SettingsPage() {
                     return (
                       <div key={keyConfig.name}>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="text-sm font-semibold text-slate-700">
+                          <label className="text-sm font-semibold text-text-secondary">
                             {keyConfig.label}
                           </label>
                           {existing && (
-                            <span className="flex items-center gap-1 text-[10px] text-green-600 font-medium">
+                            <span className="flex items-center gap-1 text-[10px] text-green-400 font-medium">
                               <CheckCircle className="h-3 w-3" />
                               محفوظ — {new Date(existing.created_at!).toLocaleDateString("ar")}
                             </span>
@@ -1288,15 +1288,15 @@ export default function SettingsPage() {
                         </div>
 
                         {keyConfig.hint && (
-                          <p className="text-xs text-slate-400 mb-2">{keyConfig.hint}</p>
+                          <p className="text-xs text-text-muted mb-2">{keyConfig.hint}</p>
                         )}
 
                         <div className="flex gap-2">
                           <div className="relative flex-1">
-                            <Lock className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-300" />
+                            <Lock className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
                             <input
                               type={isVisible ? "text" : "password"}
-                              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pe-10 ps-10 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 focus:bg-white transition-all outline-none"
+                              className="w-full rounded-xl border border-border-subtle bg-surface-hover py-3 pe-10 ps-10 text-sm text-text-secondary placeholder:text-text-muted focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 focus:bg-surface-card transition-all outline-none"
                               placeholder={existing ? existing.key_value : keyConfig.placeholder}
                               value={editValues[editKey] || ""}
                               onChange={(e) => setEditValues((prev) => ({ ...prev, [editKey]: e.target.value }))}
@@ -1309,7 +1309,7 @@ export default function SettingsPage() {
                             <button
                               type="button"
                               onClick={() => setShowValues((prev) => ({ ...prev, [editKey]: !isVisible }))}
-                              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
                             >
                               {isVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                             </button>
@@ -1318,7 +1318,7 @@ export default function SettingsPage() {
                           <button
                             onClick={() => handleSave(activeConfig.id, keyConfig.name)}
                             disabled={!isEditing || saving === editKey}
-                            className="flex h-[46px] w-[46px] items-center justify-center rounded-xl bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shrink-0"
+                            className="flex h-[46px] w-[46px] items-center justify-center rounded-xl bg-amber-300 text-white hover:bg-amber-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shrink-0"
                             title="حفظ"
                           >
                             {saving === editKey ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -1330,21 +1330,21 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Save All */}
-                <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+                <div className="px-6 py-4 border-t border-border-subtle bg-surface-hover flex justify-end gap-3">
                   <button
                     onClick={() => {
                       const resetKeys: Record<string, string> = {};
                       activeConfig.keys.forEach((k) => { resetKeys[`${activeConfig.id}:${k.name}`] = ""; });
                       setEditValues((prev) => ({ ...prev, ...resetKeys }));
                     }}
-                    className="px-4 py-2.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                    className="px-4 py-2.5 text-sm text-text-muted hover:text-text-secondary transition-colors"
                   >
                     إلغاء التغييرات
                   </button>
                   <button
                     onClick={() => handleSaveAll(activeConfig)}
                     disabled={!activeConfig.keys.some((k) => editValues[`${activeConfig.id}:${k.name}`]?.trim())}
-                    className="flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center gap-2 rounded-xl bg-amber-300 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   >
                     <Save className="h-4 w-4" />
                     حفظ جميع التغييرات
