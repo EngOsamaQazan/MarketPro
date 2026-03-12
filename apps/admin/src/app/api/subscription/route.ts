@@ -31,12 +31,12 @@ export async function GET() {
       currentUsage[u.metric] = (currentUsage[u.metric] || 0) + u.count;
     }
 
-    const { data: clientCount } = await auth.supabase
+    const { count: clientCount } = await auth.supabase
       .from("companies")
       .select("id", { count: "exact", head: true })
       .eq("organization_id", auth.orgId);
 
-    const { data: memberCount } = await auth.supabase
+    const { count: memberCount } = await auth.supabase
       .from("organization_members")
       .select("id", { count: "exact", head: true })
       .eq("organization_id", auth.orgId);
@@ -45,11 +45,11 @@ export async function GET() {
       organization: orgRes.data,
       plans: plansRes.data || [],
       usage: {
-        clients: clientCount ? (clientCount as any).length || 0 : 0,
+        clients: clientCount || 0,
         posts_this_month: currentUsage.posts || 0,
         campaigns: currentUsage.campaigns || 0,
         ai_credits: currentUsage.ai_credits || 0,
-        team_members: memberCount ? (memberCount as any).length || 0 : 0,
+        team_members: memberCount || 0,
       },
     });
   } catch (error: any) {

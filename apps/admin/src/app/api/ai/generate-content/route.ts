@@ -3,11 +3,20 @@ import Anthropic from "@anthropic-ai/sdk";
 import { CONTENT_CREATOR_SYSTEM_PROMPT, buildContentPrompt } from "@satwa/ai";
 import { getAnthropicKey } from "@/lib/api-keys";
 import { requireAuth } from "@/lib/auth";
+import { checkUsageLimit, logUsage } from "@/lib/usage-limits";
 
 export async function POST(req: NextRequest) {
   try {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
+
+    const limit = await checkUsageLimit(auth, "ai_credits");
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: `تجاوزت حد استخدام الذكاء الاصطناعي في باقتك (${limit.limit})`, limit: limit.limit },
+        { status: 403 }
+      );
+    }
 
     const apiKey = await getAnthropicKey();
     const anthropic = new Anthropic({ apiKey });
@@ -45,6 +54,8 @@ export async function POST(req: NextRequest) {
     }
 
     const content = JSON.parse(jsonMatch[0]);
+
+    await logUsage(auth.supabase, auth.orgId, "ai_credits");
 
     return NextResponse.json({
       success: true,

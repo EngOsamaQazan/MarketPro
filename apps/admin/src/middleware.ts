@@ -33,7 +33,8 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-  const isAuthPage = pathname.startsWith("/login");
+  const isAuthPage =
+    pathname.startsWith("/login") || pathname.startsWith("/register");
   const isDashboardRoute = pathname.startsWith("/dashboard");
 
   if (!user && isDashboardRoute) {

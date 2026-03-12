@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
+import { checkUsageLimit, logUsage } from "@/lib/usage-limits";
 import { getApiKey } from "@/lib/api-keys";
 import { MetaClient } from "@satwa/social";
 
@@ -7,6 +8,14 @@ export async function POST(req: NextRequest) {
   try {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
+
+    const limit = await checkUsageLimit(auth, "campaigns");
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: `تجاوزت حد الحملات في باقتك (${limit.limit})`, limit: limit.limit },
+        { status: 403 }
+      );
+    }
 
     const {
       company_id,
@@ -127,6 +136,8 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    await logUsage(auth.supabase, auth.orgId, "campaigns");
 
     return NextResponse.json({
       success: true,

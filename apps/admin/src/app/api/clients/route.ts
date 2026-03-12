@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
+import { checkUsageLimit, logUsage } from "@/lib/usage-limits";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,14 @@ export async function POST(req: NextRequest) {
     const auth = await requireAuth();
     if (auth.error) return auth.error;
 
+    const limit = await checkUsageLimit(auth, "clients");
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { error: `تجاوزت حد العملاء في باقتك (${limit.limit})`, limit: limit.limit },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
 
     const { data, error } = await auth.supabase
@@ -51,6 +60,8 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    await logUsage(auth.supabase, auth.orgId, "clients");
 
     return NextResponse.json({ client: data });
   } catch (error: any) {
