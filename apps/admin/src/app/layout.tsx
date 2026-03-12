@@ -25,12 +25,21 @@ export const metadata: Metadata = {
     siteName: "سطوة - Satwa",
     locale: "ar_SA",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1024,
+        height: 1024,
+        alt: "سطوة — منصة التسويق الرقمي بالذكاء الاصطناعي",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "سطوة | منصة التسويق الرقمي بالذكاء الاصطناعي",
     description:
       "منصة عربية متكاملة تدير حملاتك الإعلانية، تصنع محتواك، وتحلل أداءك — بذكاء لا ينام",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

@@ -16,20 +16,11 @@ export default function AppleIcon() {
           justifyContent: "center",
           borderRadius: 36,
           background: "linear-gradient(135deg, #D4A574, #C9956A, #B8843C)",
+          fontSize: 96,
+          color: "#09090B",
         }}
       >
-        <svg
-          width="100"
-          height="100"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#09090B"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-        </svg>
+        ✦
       </div>
     ),
     { ...size }
